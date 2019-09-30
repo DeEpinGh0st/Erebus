@@ -5,7 +5,7 @@ $From = "1510536500@qq.com";
 $To = "1510536500@qq.com";
 $UserName = "1510536500@qq.com";
 $Password = "xxxxx";#Mailbox Third Party Authorization Code, Not Mailbox Password!
-$Switch = "on";
+$Switch = "off";
 #Config
 
 on heartbeat_5s {
