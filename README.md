@@ -9,6 +9,10 @@
 * 提权模块调整至Local Privilege Escalation选项卡
   >后续本地权限提升功能会添加到该菜单
 
+* 新增Juicy Potato本地提权模块
+
+![20191005232005.png](https://i.loli.net/2019/10/05/HNiacQ3RfAO1XWy.png)
+
 # 更新日志 2019-09-30
 * 添加自启动.
 >支持Run,RunOnce,RunOnceEx
