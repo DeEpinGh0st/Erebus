@@ -1,20 +1,14 @@
 # Erebus CobaltStrike后渗透测试插件
 ### Auther by S0cke3t
-│  Main.cna (插件入口文件)
-│
-├─exp (exp文件目录)
-│  └─8120 (EXP的CVE后缀编号)
-│
-├─modules (插件模块目录)
-│ 
-│
-├─script (需要加载的powershell等第三方脚本)
-│
-│
-└─server(建议放到服务端运行的插件)
+
 # 更新日志 2019-10-05
 * 重新组织代码结构,采用模块化设计
+  >modules(插件各模块文件夹)
+  server(建议放到服务端运行的插件)
+  
 * 提权模块调整至Local Privilege Escalation选项卡
+  >后续本地权限提升功能会添加到该菜单
+
 # 更新日志 2019-09-30
 * 添加自启动.
 >支持Run,RunOnce,RunOnceEx
