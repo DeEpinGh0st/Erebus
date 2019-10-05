@@ -1,0 +1,7 @@
+#helper menu
+
+menu "About"{
+    item("&Homepage", { url_open("https://github.com/DeEpinGh0st/Erebus"); });
+    item("&Auther Blog", { url_open("http://www.saferoad.cc/"); });
+    item("&User Manual (Working on Update)", { url_open("http://www.saferoad.cc/archives/330"); });
+}

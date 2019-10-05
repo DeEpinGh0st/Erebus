@@ -1,0 +1,18 @@
+# Plugin Loader
+
+
+popup beacon {
+	insert_menu("beacon_bottom", $1);
+    separator();
+    menu "Erebus"{
+        include(script_resource("modules/pwn.cna"));
+        include(script_resource("modules/lpe.cna"));
+        include(script_resource("modules/persistence.cna"));
+        include(script_resource("modules/auxiliary.cna"));
+        include(script_resource("modules/gather.cna"));
+        include(script_resource("modules/post.cna"));
+        include(script_resource("modules/funs.cna"));
+        include(script_resource("modules/helper.cna"));
+    }
+}
+

