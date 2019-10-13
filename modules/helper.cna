@@ -34,11 +34,8 @@ menu "About"{
         $handle = openf( GetPath()."ver.txt");
         $lver = readAll($handle);
         if($rver['@'] ne $lver['@']){
-            show_message("Find a New Version, Download Now ?");
-            #println("git clone https://github.com/DeEpinGh0st/Erebus.git ".replace(GetPath(),"\\\\","/"));
-            #exec("git clone https://github.com/DeEpinGh0st/Erebus.git ".replace(GetPath(), "\\\\", "/"));
-            #exec("cmd.exe /c git clone https://github.com/DeEpinGh0st/Erebus.git E:/");
-            show_message("Update done , Please reload main.cna !");
+            show_message("Find a New Version ! \n\nLocal Version:  $+ $lver['@'] \nLatest Version:  $+ $rver['@'] \n ");
+            url_open("https://github.com/DeEpinGh0st/Erebus");
         }
         else{
             show_message("No update is available !");
