@@ -2,6 +2,15 @@
 ### Auther by S0cke3t
 
 
+# 更新日志 2019-10-13
+* 添加关于菜单
+  >用户手册(更新中)  
+  检查更新
+
+* Juicy Potato  Payload文件采用随机名称
+
+* 清理本地残留文件
+
 # 更新日志 2019-10-06
 * 持久化
   >自启动添加Winlogon,Logon Scripts支持  
