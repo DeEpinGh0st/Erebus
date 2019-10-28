@@ -33,7 +33,10 @@ menu "About"{
         $rver = readAll(exec("curl -s --url https://raw.githubusercontent.com/DeEpinGh0st/Erebus/master/ver.txt  --ssl  --connect-timeout 10"));
         $handle = openf( GetPath()."ver.txt");
         $lver = readAll($handle);
-        if($rver['@'] ne $lver['@']){
+        if ($rver['@'] eq ""){
+            show_error("Update Timeout , Check your network !");
+        }
+        else if($rver['@'] ne $lver['@']){
             show_message("Find a New Version ! \n\nLocal Version:  $+ $lver['@'] \nLatest Version:  $+ $rver['@'] \n ");
             url_open("https://github.com/DeEpinGh0st/Erebus");
         }
