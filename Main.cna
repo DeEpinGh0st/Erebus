@@ -12,7 +12,8 @@ popup beacon {
         include(script_resource("modules/gather.cna"));
         include(script_resource("modules/post.cna"));
         include(script_resource("modules/funs.cna"));
-        include(script_resource("modules/helper.cna"));
+        include(script_resource("modules/third.cna"));
+        include(script_resource("modules/helper.cna"));    
     }
 }
 
