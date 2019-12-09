@@ -2,6 +2,15 @@
 ### Auther by S0cke3t
 
 
+# 更新日志 2019-12-09
+* 修复BUG
+* 添加powershell访问限制下执行powershell功能
+  >详见: Post---Sharpshell  
+  Note: 此功能需要目标支持 .Net Framework 2.0
+
+![sharpshell.png](https://i.loli.net/2019/12/09/9xFOLltAwIS5kKo.png)
+
+
 # 更新日志 2019-11-22
 * 添加RdpThief第三方模块【详见Third-party菜单】
     >此模块可从目标RDP客户端中提取明文账户密码  
@@ -71,4 +80,5 @@
 [Windows中常见后门持久化方法总结](http://1t.click/a4rQ)  
 [RdpThief Github传送门](https://github.com/0x09AL/RdpThief)  
 [RdpThief 原理](https://www.mdsec.co.uk/2019/11/rdpthief-extracting-clear-text-credentials-from-remote-desktop-clients/)  
-[提权: 武器化CVE-2019-1405/CVE-2019-1322](https://github.com/apt69/COMahawk)
+[提权: 武器化CVE-2019-1405/CVE-2019-1322](https://github.com/apt69/COMahawk)  
+[如何绕过PowerShell访问限制并实现PowerShell代码执行 ](https://www.freebuf.com/articles/system/218883.html)

