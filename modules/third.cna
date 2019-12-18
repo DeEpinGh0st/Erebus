@@ -1,3 +1,4 @@
 menu "Third-party"{
     include(script_resource("third/rdpthief/RdpThief.cna"));
+    include(script_resource("third/EventLogMaster/eventlog.cna"));
 }

@@ -1,0 +1,29 @@
+#define function
+sub ClearLog{
+    local('$logName $Type $recordID $Ip');
+    $logName = $3['eventLogName'];
+    $Type = $3['eventType'];
+    $recordID = $3['eventRecordID'];
+    $Ip = $3['ipAddress'];
+    bpowershell_import($bid, script_resource("third/EventLogMaster/Func.ps1"));
+    bpowerpick($bid, "ClearnDefaultRdp");
+    bpowerpick($bid, "ClearnEventRecordID -EventLogName ".$logName." -EventType ".$Type." -EventRecordID ".$recordID);
+    bpowerpick($bid, "ClearnIpAddress -EventLogName ".$logName." -EventType ".$Type." -IpAddress ".$Ip);
+    bpowerpick($bid, "ClearnTempLog");
+}
+
+
+#append item
+item "EventLogMaster"{
+    local('$Desc');
+    $Desc = "Clearn RDP logon log, Default Rdp file IP information, and temp log. ";
+    $bid = $1['@'];
+    $Dialog = dialog("EventLogMaster",%(bid => $bid, eventLogName => "Security", eventType => "Security", eventRecordID => "4624", ipAddress => "172.16.12.5"),&ClearLog);
+    dialog_description($Dialog, $Desc);
+    drow_text($Dialog, "eventLogName", "EventLogName: ");
+    drow_text($Dialog, "eventType", "EventType: ");
+    drow_text($Dialog, "eventRecordID", "EventRecordID: ");
+    drow_text($Dialog, "ipAddress", "IpAddress: ");
+    dbutton_action($Dialog, "Clear");
+    dialog_show($Dialog);
+}
