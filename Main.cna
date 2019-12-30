@@ -1,10 +1,11 @@
 # Plugin Loader
 
+include(script_resource("modules/commands.cna"));
 
 popup beacon {
 	insert_menu("beacon_bottom", $1);
     separator();
-    menu "Erebus"{
+    menu "Erebus"{ 
         include(script_resource("modules/pwn.cna"));
         include(script_resource("modules/lpe.cna"));
         include(script_resource("modules/persistence.cna"));

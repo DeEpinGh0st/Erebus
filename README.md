@@ -1,6 +1,18 @@
 # Erebus CobaltStrike后渗透测试插件
 ### Auther by S0cke3t
 
+# 更新日志 2019-12-30
+* 添加`SafetyKatz`
+  >此功能为一个修改的`mimikatz`,截至目前(2019-12-30)此方式可绕过大部分AV检测和运行  
+  详见:Interact----SafetyKatz 命令  
+* 添加`Seatbelt`
+  >此功能是一个信息收集模块,可实现对目标系统,用户等其他信息的收集整理, 用户可指定收集的条目  
+  详见:Interact----Seatbelt 命令  
+  Usage  
+  Seatbelt 帮助信息    
+  Seatbelt system 收集系统信息  
+  Seatbelt user 收集用户信息  
+  Seatbelt xxx yyy  指定收集条目  
 
 # 更新日志 2019-12-18
 * 添加`EventLogMaster`第三方工具的RDP痕迹清除模块

