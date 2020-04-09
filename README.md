@@ -2,14 +2,16 @@
 ### Auther by S0cke3t  
 **部分功能只适用于cobalt strike 3.x**
 
-#  更新日志 2020-04-09  (V1.3.0)  
+##  更新日志 2020-04-09  (V1.3.0)  
 * 完善信息收集模块  
 	> 详见gather----Collector  
-![20200409164207.png](https://i.loli.net/2020/04/09/93FUfCSpVhyact1.png)    
+	**注意: 重定向文件必须与脚本中定义的文件名一致**  
+	
+	![20200409220109.png](README_md_files/20200409220109.png?v=1&type=image)  
 *  添加post模块`enable rdp`,`turn off firewall`功能对windows 2003 (<=NT 5.2)的支持  
 * 改善模块加载顺序  提升使用体验  
 * 精简代码  
-# 更新日志 2020-03-08  
+## 更新日志 2020-03-08  
 * 添加`cookie steal`  
   >支持`搜狗,360,360极速,QQ,火狐,谷歌,2345`  
 	  更多使用事项请移步[Browser-cookie-steal](https://github.com/DeEpinGh0st/Browser-cookie-steal)  
@@ -17,7 +19,7 @@
   
   ![20200308200339.png](https://i.loli.net/2020/03/08/bzrnHtWvc1VxENu.png)
 
-# 更新日志 2019-12-30
+## 更新日志 2019-12-30
 * 添加`SafetyKatz`
   >此功能为一个修改的`mimikatz`,截至目前(2019-12-30)此方式可绕过大部分AV检测和运行  
   详见:Interact----SafetyKatz 命令  
@@ -30,7 +32,7 @@
   Seatbelt user 收集用户信息  
   Seatbelt xxx yyy  指定收集条目  
 
-# 更新日志 2019-12-18
+## 更新日志 2019-12-18
 * 添加`EventLogMaster`第三方工具的RDP痕迹清除模块
   >详见: Third-party----EventLogMaster  
 
@@ -44,7 +46,7 @@
   ![20191218142234.png](https://i.loli.net/2019/12/18/jfF8mCSpih4kxvq.png)
   ![20191218135225.png](https://i.loli.net/2019/12/18/rfBLJcRyevl827G.png)
 
-# 更新日志 2019-12-09
+## 更新日志 2019-12-09
 * 修复BUG
 * 添加powershell访问限制下执行powershell功能
   >详见: Post---Sharpshell  
@@ -52,7 +54,7 @@
 
   ![sharpshell.png](https://i.loli.net/2019/12/09/9xFOLltAwIS5kKo.png)
 
-# 更新日志 2019-11-22
+## 更新日志 2019-11-22
 * 添加`RdpThief`第三方模块【详见Third-party菜单】
     >此模块可从目标RDP客户端中提取明文账户密码  
     Note: 需要目标支持`Visual C++ 2015 Redistributable` 或更高版本支持  
@@ -67,13 +69,13 @@
 
   ![20191122141456.png](https://i.loli.net/2019/11/22/7fmspHtorcJWKMn.png)
 
-# 更新日志 2019-11-4
+## 更新日志 2019-11-4
 * 添加MS16-032提权模块
     >利用后需要手动清理残留文件
 
   ![20191104172829.png](https://i.loli.net/2019/11/04/9vNRyPJoA578QHg.png)
 
-# 更新日志 2019-10-13
+## 更新日志 2019-10-13
 * 添加关于菜单
   >用户手册(更新中)  
   检查更新
@@ -82,13 +84,13 @@
 
 * 清理本地残留文件
 
-# 更新日志 2019-10-06
+## 更新日志 2019-10-06
 * 持久化
   >自启动添加Winlogon,Logon Scripts支持  
    添加服务注册
 
   ![20191006205222.png](https://i.loli.net/2019/10/06/QfS4qXragDejNTl.png)
-# 更新日志 2019-10-05
+## 更新日志 2019-10-05
 * 重新组织代码结构,采用模块化设计
   >modules(插件各模块文件夹)  
   server(建议放到服务端运行的插件)
@@ -100,7 +102,7 @@
 
   ![20191005232005.png](https://i.loli.net/2019/10/05/HNiacQ3RfAO1XWy.png)
 
-# 更新日志 2019-09-30
+## 更新日志 2019-09-30
 * 添加自启动.
   >支持Run,RunOnce,RunOnceEx
 

