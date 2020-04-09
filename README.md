@@ -1,7 +1,14 @@
 # Erebus CobaltStrike后渗透测试插件
-### Auther by S0cke3t
+### Auther by S0cke3t  
+**部分功能只适用于cobalt strike 3.x**
 
-
+#  更新日志 2020-04-09  (V1.3.0)  
+* 完善信息收集模块  
+	> 详见gather----Collector  
+![20200409164207.png](https://i.loli.net/2020/04/09/93FUfCSpVhyact1.png)    
+*  添加post模块`enable rdp`,`turn off firewall`功能对windows 2003 (<=NT 5.2)的支持  
+* 改善模块加载顺序  提升使用体验  
+* 精简代码  
 # 更新日志 2020-03-08  
 * 添加`cookie steal`  
   >支持`搜狗,360,360极速,QQ,火狐,谷歌,2345`  

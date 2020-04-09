@@ -1,16 +1,32 @@
 # Plugin Loader
+sub GetPath{
+    $handle = openf("setting.txt");
+    $path = readln($handle);
+    closef($handle);
+    return $path;
+}
 
 include(script_resource("modules/commands.cna"));
+include(script_resource("modules/auxiliary.cna"));
+action("\cB ===Erebus===");
+action("\cC Auther: S0cke3t");
+if (!-exists "setting.txt"){
+    action("\c5 Ver: No profile");
+}
+else{
+    $handle = openf( GetPath()."ver.txt");
+    $lver = readAll($handle);
+    action("\c5 Ver: ".$lver['@']);
+}
 
 popup beacon {
 	insert_menu("beacon_bottom", $1);
     separator();
     menu "Erebus"{ 
+        include(script_resource("modules/gather.cna"));
         include(script_resource("modules/pwn.cna"));
         include(script_resource("modules/lpe.cna"));
         include(script_resource("modules/persistence.cna"));
-        include(script_resource("modules/auxiliary.cna"));
-        include(script_resource("modules/gather.cna"));
         include(script_resource("modules/post.cna"));
         include(script_resource("modules/funs.cna"));
         include(script_resource("modules/third.cna"));

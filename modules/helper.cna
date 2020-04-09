@@ -18,7 +18,6 @@ sub GetPath{
 menu "About"{
     item("&Homepage", { url_open("https://github.com/DeEpinGh0st/Erebus"); });
     item("&Auther Blog", { url_open("http://www.saferoad.cc/"); });
-    item("&User Manual (Working on Update)", { url_open("http://www.saferoad.cc/archives/330"); });
     item "Check Update"{
         if (!-exists "setting.txt"){
             show_error("profile was not found !");
