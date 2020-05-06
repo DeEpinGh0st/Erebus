@@ -21,7 +21,7 @@ on heartbeat_5s {
 
 on beacon_initial {
     bsleep($1, 30, 30);
-    bnote($1, "Bid: ".beacon_info($1, "id")."  Arch: ".beacon_info($1,"barch")."  Ver: ".beacon_info($1,"ver"));
+    bnote($1, "Bid: ".beacon_info($1, "id")."  Ver: ".beacon_info($1,"ver"));
     if ($Switch eq "on"){
         action("\c9Sending Mail......");
         local('$Ip $User $ComName $Arch $Handle $Mail_content');

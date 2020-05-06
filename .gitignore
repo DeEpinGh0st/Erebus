@@ -24,5 +24,7 @@ hs_err_pid*
 
 # Until file
 UntilTest/*
-
+logs/*
+temp/*
 !.gitkeep
+*.TMP

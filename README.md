@@ -1,9 +1,24 @@
 # Erebus CobaltStrike后渗透测试插件  
 ### Auther by S0cke3t  
-**部分功能只适用于cobalt strike 3.x**
+**部分功能只适用于cobalt strike 4.x**  
 **由于异步处理问题，某些功能可能会存在BUG**  
 **暂时未找到解决方法，如果大佬们有解决方案，欢迎联系我~**  
 
+##	更新日志 2020-05-06 (V1.3.2)
+
+ - LPE整合，添加
+	> 整合三款Potato提权
+	Rotten-Potato  
+	Juicy-Potato  
+	Sweet-Potato  
+	详见:Local Privilege Escalation-----Potatos
+ - post模块添加窃取windows凭证功能
+	>基于bmimikatz
+ - 调整上线备注信息
+ - 附
+	>免杀的mimikatz 2.2.0 x64
+	可过360，腾讯管家，金山，火绒动静检测，其余未测试。
+	详见: post/SoftMgr.exe
 ##	更新日志 2020-04-14 (V1.3.1)  
 * 信息收集模块功能添加  
 	> 信息收集模块添加`审计主机可用提权漏洞功能`,此功能基于`windows-exploit-suggester`,执行此功能后会在插件logs目录下生成对应`主机名-audit.txt`的审计文件  
@@ -122,8 +137,10 @@
 
 ## 参考文献
 [Windows中常见后门持久化方法总结](http://1t.click/a4rQ)  
-[RdpThief Github传送门](https://github.com/0x09AL/RdpThief)  
+[RdpThief ](https://github.com/0x09AL/RdpThief)  
 [RdpThief 原理](https://www.mdsec.co.uk/2019/11/rdpthief-extracting-clear-text-credentials-from-remote-desktop-clients/)  
 [提权: 武器化CVE-2019-1405/CVE-2019-1322](https://github.com/apt69/COMahawk)  
 [如何绕过PowerShell访问限制并实现PowerShell代码执行 ](https://www.freebuf.com/articles/system/218883.html)  
 [EventLogMaster-RDP日志取证&清除](https://github.com/QAX-A-Team/EventLogMaster)
+[SweetPotato_CS](https://github.com/Tycx2ry/SweetPotato_CS)
+[xencrypt](https://github.com/the-xentropy/xencrypt)
