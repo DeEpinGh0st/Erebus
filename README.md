@@ -7,7 +7,7 @@
 ##	更新日志 2020-05-06 (V1.3.2)
 
  - LPE整合，添加
-	> 整合三款Potato提权
+	> 整合三款Potato提权  
 	Rotten-Potato  
 	Juicy-Potato  
 	Sweet-Potato  
@@ -15,10 +15,11 @@
  - post模块添加窃取windows凭证功能
 	>基于bmimikatz
  - 调整上线备注信息
+  >删除arch信息
  - 附
-	>免杀的mimikatz 2.2.0 x64
-	可过360，腾讯管家，金山，火绒动静检测，其余未测试。
-	详见: post/SoftMgr.exe
+	>免杀的mimikatz 2.2.0 x64  
+	可过360，腾讯管家，金山，火绒动静检测，其余未测试。  
+	详见: post/SoftMgr.exe  
 ##	更新日志 2020-04-14 (V1.3.1)  
 * 信息收集模块功能添加  
 	> 信息收集模块添加`审计主机可用提权漏洞功能`,此功能基于`windows-exploit-suggester`,执行此功能后会在插件logs目录下生成对应`主机名-audit.txt`的审计文件  
