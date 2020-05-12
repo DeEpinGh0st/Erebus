@@ -1,47 +1,10 @@
 #define functions
 
-sub SetPath{
-    show_message("> setting.txt");
-    $handle = openf("> setting.txt");
-    writeb($handle, $3['Path']."\\");
-    closef($handle);
-}
-sub GetPath{
-    $handle = openf("setting.txt");
-    $path = readln($handle);
-    closef($handle);
-    return $path;
-}
+
 
 #helper menu
 
 menu "About"{
     item("&Homepage", { url_open("https://github.com/DeEpinGh0st/Erebus"); });
     item("&Auther Blog", { url_open("http://www.saferoad.cc/"); });
-    item "Check Update"{
-        if (!-exists "setting.txt"){
-            show_error("profile was not found !");
-            $bid = $1['@'];
-            $Dialog = dialog("New Profile", %(Path =>"Path location of plugin", bid => $bid),&SetPath);
-            dialog_description($Dialog, "Fill in a new profile");
-            drow_text($Dialog, "Path", "Plugin Path: ");
-            dbutton_action($Dialog, "Submit");
-            dialog_show($Dialog);
-            return;
-        }
-        $rver = readAll(exec("curl -s --url https://raw.githubusercontent.com/DeEpinGh0st/Erebus/master/ver.txt  --ssl  --connect-timeout 10"));
-        $handle = openf( GetPath()."ver.txt");
-        $lver = readAll($handle);
-        if ($rver['@'] eq ""){
-            show_error("Update Timeout , Check your network !");
-        }
-        else if($rver['@'] ne $lver['@']){
-            show_message("Find a New Version ! \n\nLocal Version:  $+ $lver['@'] \nLatest Version:  $+ $rver['@'] \n ");
-            url_open("https://github.com/DeEpinGh0st/Erebus");
-        }
-        else{
-            show_message("No update is available !");
-        }
-        
-    }
 }

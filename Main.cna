@@ -1,23 +1,11 @@
 # Plugin Loader
-sub GetPath{
-    $handle = openf("setting.txt");
-    $path = readln($handle);
-    closef($handle);
-    return $path;
-}
 
+include(script_resource("Common.sl"));
 include(script_resource("modules/commands.cna"));
 include(script_resource("modules/auxiliary.cna"));
 action("\cB ===Erebus===");
 action("\cC Auther: S0cke3t");
-if (!-exists "setting.txt"){
-    action("\c5 Ver: No profile");
-}
-else{
-    $handle = openf( GetPath()."ver.txt");
-    $lver = readAll($handle);
-    action("\c5 Ver: ".$lver['@']);
-}
+action("\c5 Ver: ".Getinfo()[0]);
 
 popup beacon {
 	insert_menu("beacon_bottom", $1);
