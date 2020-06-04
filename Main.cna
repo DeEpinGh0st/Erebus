@@ -1,8 +1,11 @@
 # Plugin Loader
-
+action("\cB Loading initial scripts.....");
 include(script_resource("Common.sl"));
 include(script_resource("modules/commands.cna"));
+action("\c9 Loaded commands: Safetykatz,Seatbelt");
 include(script_resource("modules/auxiliary.cna"));
+include(script_resource("third/rdpthief/RdpThief.cna"));
+action("\c9 Loaded command: Rdpthief");
 action("\cB ===Erebus===");
 action("\cC Auther: S0cke3t");
 action("\c5 Ver: ".Getinfo()[0]);

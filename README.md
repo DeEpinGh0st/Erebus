@@ -15,7 +15,7 @@
  - post模块添加窃取windows凭证功能
 	>基于bmimikatz
  - 调整上线备注信息
-  >删除arch信息
+   >删除arch信息
  - 附
 	>免杀的mimikatz 2.2.0 x64  
 	可过360，腾讯管家，金山，火绒动静检测，其余未测试。  
@@ -142,6 +142,6 @@
 [RdpThief 原理](https://www.mdsec.co.uk/2019/11/rdpthief-extracting-clear-text-credentials-from-remote-desktop-clients/)  
 [提权: 武器化CVE-2019-1405/CVE-2019-1322](https://github.com/apt69/COMahawk)  
 [如何绕过PowerShell访问限制并实现PowerShell代码执行 ](https://www.freebuf.com/articles/system/218883.html)  
-[EventLogMaster-RDP日志取证&清除](https://github.com/QAX-A-Team/EventLogMaster)
-[SweetPotato_CS](https://github.com/Tycx2ry/SweetPotato_CS)
+[EventLogMaster-RDP日志取证&清除](https://github.com/QAX-A-Team/EventLogMaster)  
+[SweetPotato_CS](https://github.com/Tycx2ry/SweetPotato_CS)  
 [xencrypt](https://github.com/the-xentropy/xencrypt)

