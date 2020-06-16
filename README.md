@@ -11,7 +11,7 @@
 - post模块，添加  
   > 进程迁移功能  
   根据用户配置，将原生会话文件位置迁移到新的目录，并重新命名文件名称生成新会话  
-  ![](README_md_files/image.png?v=1&type=image)
+  ![](README_md_files/image.png?v=1&type=image)   
   Migrate directory: 进行迁移的目录，此项在setting.txt文件中进行配置。  
   Process name: 新进程名，自动生成，生成规则可在common.sl中修改。  
   Keep old connection: 是否保持原有会话连接。  

