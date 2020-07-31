@@ -26,5 +26,6 @@ hs_err_pid*
 UntilTest/*
 logs/*
 temp/*
+bin/*
 !.gitkeep
 *.TMP

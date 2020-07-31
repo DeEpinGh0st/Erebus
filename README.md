@@ -1,8 +1,15 @@
 # Erebus CobaltStrike后渗透测试插件  
-### Auther by S0cke3t  
+  
 **部分功能只适用于cobalt strike 4.x**  
 **由于异步处理问题，某些功能可能会存在BUG**  
 **暂时未找到解决方法，如果大佬们有解决方案，欢迎联系我~**  
+
+## 更新日志 2020-07-31(V1.3.4)
+- 添加fakelogonscreen命令  
+- 添加SpaceRunner  
+  >此工具用于将任意PowerShell代码编译为C#程序，而无需通过使用runspace启动PowerShell进程。具体使用详情见参考链接  
+![输入图片描述](README_md_files/20200731151716.png?v=1&type=image)  
+详见： Attacks----Bypass----SpaceRunner  
 
 ##  更新日志 2020-06-09(V1.3.3)
 - 信息收集模块，添加 
@@ -154,7 +161,7 @@
 * 整合IFEO菜单为Persistent
   >后续持久化功能会添加到该菜单
 
-## 参考文献
+## 参考
 [Windows中常见后门持久化方法总结](http://1t.click/a4rQ)  
 [RdpThief ](https://github.com/0x09AL/RdpThief)  
 [RdpThief 原理](https://www.mdsec.co.uk/2019/11/rdpthief-extracting-clear-text-credentials-from-remote-desktop-clients/)  
@@ -163,3 +170,4 @@
 [EventLogMaster-RDP日志取证&清除](https://github.com/QAX-A-Team/EventLogMaster)  
 [SweetPotato_CS](https://github.com/Tycx2ry/SweetPotato_CS)  
 [xencrypt](https://github.com/the-xentropy/xencrypt)
+[SpaceRunner](https://github.com/Mr-B0b/SpaceRunner)

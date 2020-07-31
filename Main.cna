@@ -25,3 +25,10 @@ popup beacon {
     }
 }
 
+popup attacks {
+	separator();
+    menu "Bypass"{ 
+        include(script_resource("modules/bypass.cna"));
+    }
+}
+
