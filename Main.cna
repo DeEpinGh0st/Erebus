@@ -12,7 +12,6 @@ action("\c5 Ver: ".Getinfo()[0]);
 
 popup beacon {
 	insert_menu("beacon_bottom", $1);
-    separator();
     menu "Erebus"{ 
         include(script_resource("modules/gather.cna"));
         include(script_resource("modules/pwn.cna"));
