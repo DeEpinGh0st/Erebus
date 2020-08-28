@@ -20,6 +20,6 @@ sub Getname{
         $fname = $fname.rand(@array);
         $total = $total - 1;
     }
-    return $fname.".exe";
+    return $fname;
 }
 

