@@ -2,7 +2,7 @@
 action("\cB Loading initial scripts.....");
 include(script_resource("Common.sl"));
 include(script_resource("modules/commands.cna"));
-action("\c9 Loaded commands: safetykatz,seatbelt,hivejack,logonscreen");
+action("\c9 Loaded commands: safetykatz,seatbelt,hivejack,logonscreen,badcmd");
 include(script_resource("modules/auxiliary.cna"));
 include(script_resource("third/rdpthief/RdpThief.cna"));
 action("\c9 Loaded command: rdpthief");

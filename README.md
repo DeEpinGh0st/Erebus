@@ -4,6 +4,14 @@
 **由于异步处理问题，某些功能可能会存在BUG**  
 **暂时未找到解决方法，如果大佬们有解决方案，欢迎联系我~**  
 
+
+##  更新日志 2020-10-19(V1.3.5)  
+- 添加badcmd命令(基于badpotato)  
+- potatos提权添加badpotato  
+- post模块添加socks功能(基于ew)  
+	>详见post---->Socks tunnel  
+	![输入图片描述](README_md_files/20201019154454.png?v=1&type=image)  
+- **删除信息收集模块审计功能**  
 ## 更新日志 2020-07-31(V1.3.4)
 - 添加fakelogonscreen命令  
 - 添加SpaceRunner  

