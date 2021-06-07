@@ -1,2 +1,1 @@
-ver = 1.3.5
-dir = C:\Services\
+ver = 1.3.6
